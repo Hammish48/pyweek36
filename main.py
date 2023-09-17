@@ -14,10 +14,10 @@ def main():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-        //game logic
+        # game logic
 
 
-        //rendering
+        # rendering
         screen.fill((0, 0, 0))
 
         pen.rect(screen, (0, 200, 20), pygame.Rect(50, 50, 50,50))
