@@ -10,7 +10,7 @@ class Game:
     def __init__(self) -> None:
         self.player = Player()
         self.camera = Camera(self.player.position, pygame.Vector2(560 - self.player.size.x/2, 290 - self.player.size.y/2))
-        self.platforms = [Platform(0, 100, 100, 50), Platform(300, 100, 100, 50), Platform(-200, 100, 200, 50), Platform(-200, -50, 50, 50), Platform(-400, 100, 200, 50), Platform(-300, 50, 50, 50)]
+        self.platforms = [Platform(0, 100, 100, 50), Platform(300, 100, 100, 50), Platform(-200, 100, 200, 50), Platform(-200, -50, 50, 50), Platform(-400, 100, 200, 50), Platform(-300, 50, 50, 50), Platform(-400, 5, 50, 50)]
     def run(self,screen, fps):
         
         while True:
