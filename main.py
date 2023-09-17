@@ -7,7 +7,6 @@ def main():
     screen = pygame.display.set_mode((1120, 580))
     pygame.display.set_caption("caption")
     fps = pygame.time.Clock()
-    pygame.display.set_icon(pygame.image.load("./assets/dcpfp.png"))
     pen = pygame.draw
 
     while True:
