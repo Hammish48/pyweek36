@@ -8,6 +8,7 @@ class Player():
         self.size = pygame.Vector2(30, 30)
     def physicsProcess(self):
         self.velocity.x = 0
+        self.acceleration += pygame.Vector2(0, 0.1)
         if pygame.key.get_pressed()[pygame.K_LEFT]:
             self.velocity.x -= 5
         if pygame.key.get_pressed()[pygame.K_RIGHT]:

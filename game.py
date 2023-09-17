@@ -31,9 +31,9 @@ class Game:
                 platform.render(self.camera, screen)
                 if player.colliderect(platform.rect):
                     print("collide")
-                    self.player.velocity = pygame.Vector2(0, 0)
-                    self.player.acceleration = pygame.Vector2(0, 0)
-                    self.player.position -= pygame.Vector2(0, 1)
+                    if abs(platform.rect.top - player.bottom) < 10:
+                        self.player.velocity = pygame.Vector2(0, 0)
+                        self.player.acceleration = pygame.Vector2(0, 0)
             
 
 
