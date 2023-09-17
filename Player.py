@@ -4,7 +4,7 @@ class Player():
     def __init__(self) -> None:
         self.position = pygame.Vector2(10, -100)
         self.velocity = pygame.Vector2(0, 1)
-        self.size = pygame.Vector2(30, 30)
+        self.size = pygame.Vector2(30, 50)
         self.onFloor = False
     def physicsProcess(self, platforms):
         self.velocity.x = 0
@@ -25,7 +25,8 @@ class Player():
                     self.onFloor = True
                 
 
-
+        #physics engine :DDDDDDD
+        # the voices are getting louder
         for platform in platforms:
             if pygame.Rect(self.position.x + self.velocity.x, self.position.y + self.velocity.y, self.size.x, self.size.y).colliderect(platform.hitbox):
                 print("a")
@@ -37,5 +38,16 @@ class Player():
                         self.velocity.y = 0
                         self.onFloor = True
                         print("d")
+                    elif self.position.y > platform.position.y + platform.size.y - 3:
+                        self.velocity.y = 0
+                        self.position.y = platform.position.y + platform.size.y
+                elif self.position.y + self.size.y > platform.position.y and self.position.y < platform.position.y + platform.size.y:
+                    if self.position.x + 3 < platform.position.x:
+                        self.velocity.x = 0
+                        self.position.x = platform.position.x - self.size.x
+                    else:
+                        self.velocity.x = 0
+                        self.position.x = platform.position.x + platform.size.x
         print(self.onFloor)
         self.position += self.velocity
+
