@@ -10,9 +10,7 @@ class Game:
         self.camera = Camera(self.player.position, pygame.Vector2(560 - self.player.size.x/2, 290 - self.player.size.y/2))
         self.platforms = [Platform(100, 100, 100, 50)]
     def run(self,screen, fps):
-        width = 1120
-        height = 580
-        
+
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -32,12 +30,12 @@ class Game:
             # pygame.draw.rect(screen, (0,0,0), p_1.rect)
 
 
-            
-            if player.colliderect(p_1.rect):
-                print("collide")
-                self.player.velocity = pygame.Vector2(0, 0)
-                self.player.acceleration = pygame.Vector2(0, 0)
-                self.player.position -= pygame.Vector2(0, 1)
+            for platform in platforms:
+                if player.colliderect(platform.rect):
+                    print("collide")
+                    self.player.velocity = pygame.Vector2(0, 0)
+                    self.player.acceleration = pygame.Vector2(0, 0)
+                    self.player.position -= pygame.Vector2(0, 1)
             
 
 
