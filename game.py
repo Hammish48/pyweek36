@@ -4,11 +4,6 @@ from Player import Player
 from Camera import Camera
 from platforms import Platform
 
-
-
-
-
-
 class Game:
     def __init__(self) -> None:
         self.player = Player()
