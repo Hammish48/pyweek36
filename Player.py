@@ -14,13 +14,13 @@ class Player():
         self.shoot_cooldown_duration = 30
     def physicsProcess(self, platforms):
         self.velocity.x = 0
-        if pygame.key.get_pressed()[pygame.K_LEFT]:
+        if pygame.key.get_pressed()[pygame.K_a]:
             self.velocity.x -= 5
             if self.forward:
                 self.sprite = pygame.transform.flip(self.sprite, True, False)
                 print("fliped")
             self.forward = False
-        if pygame.key.get_pressed()[pygame.K_RIGHT]:
+        if pygame.key.get_pressed()[pygame.K_d]:
             self.velocity.x += 5
             if not self.forward:
                 self.sprite =pygame.transform.flip(self.sprite, True, False)
