@@ -65,14 +65,14 @@ class Player():
 
         self.position += self.velocity
 
-    def render(self, screen, platforms):
-        # pygame.draw.rect(screen, (0, 200, 20), pygame.Rect(self.player.position.x - self.camera.target.x + self.camera.offset.x, self.player.position.y - self.camera.target.y + self.camera.offset.y, self.player.size.x, self.player.size.y))
+    def render(self, screen, platforms, camera):
+        # pygame.draw.rect(screen, (0, 200, 20), pygame.Rect(self.position.x - camera.target.x + camera.offset.x, self.position.y - camera.target.y + camera.offset.y, self.size.x, self.size.y))
         screen.blit(self.sprite, self.position - camera.target + camera.offset)
 
         # get pos of hand on player
         hand_pos = pygame.math.Vector2(
-            self.player.position.x - self.camera.target.x + self.camera.offset.x + self.player.size.x - self.player.size.x/2, 
-            self.player.position.y - self.camera.target.y + self.camera.offset.y + self.player.size.y-30
+            self.position.x - camera.target.x + camera.offset.x + self.size.x - self.size.x/2, 
+            self.position.y - camera.target.y + camera.offset.y + self.size.y-30
         )
 
         # get cursor pos
@@ -91,25 +91,25 @@ class Player():
     
 
 
-        if pygame.mouse.get_pressed()[0] and self.player.shoot_cooldown == 0:
+        if pygame.mouse.get_pressed()[0] and self.shoot_cooldown == 0:
             # Check if the left mouse button is pressed and cooldown is zero
-            self.player.bullets.append([angle, self.player.position.x, self.player.position.y, 60])
-            print(self.player.bullets)
+            self.bullets.append([angle, self.position.x, self.position.y, 60])
+            print(self.bullets)
 
             # Set the cooldown timer to the cooldown duration
-            self.player.shoot_cooldown = self.player.shoot_cooldown_duration
+            self.shoot_cooldown = self.shoot_cooldown_duration
 
-        if self.player.shoot_cooldown > 0:
-            self.player.shoot_cooldown -= 1  # Decrement the cooldown timer
+        if self.shoot_cooldown > 0:
+            self.shoot_cooldown -= 1  # Decrement the cooldown timer
 
 
 
         bullets_to_remove_indices = []  # Create a list to store the indices of bullets to be removed
 
-        for index, bullet in enumerate(self.player.bullets):
+        for index, bullet in enumerate(self.bullets):
             pygame.draw.circle(screen, "black", (
-                bullet[1] - self.camera.target.x + self.camera.offset.x + self.player.size.x - self.player.size.x / 2,
-                bullet[2] - self.camera.target.y + self.camera.offset.y + self.player.size.y - 30), 5)
+                bullet[1] - camera.target.x + camera.offset.x + self.size.x - self.size.x / 2,
+                bullet[2] - camera.target.y + camera.offset.y + self.size.y - 30), 5)
             
             bullet[1] = bullet[1] + 25 * math.sin(bullet[0])
             bullet[2] = bullet[2] + 25 * math.cos(bullet[0])
@@ -124,7 +124,7 @@ class Player():
 
         # Remove the marked bullets in reverse order to avoid index issues
         for index in reversed(bullets_to_remove_indices):
-            del self.player.bullets[index]
+            del self.bullets[index]
 
 
         pygame.draw.line(screen, "black", hand_pos, end, 14)
