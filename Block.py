@@ -15,4 +15,6 @@ class Platform:
         elif self.texture == 2:
             screen.blit(pygame.image.load("assets/dirt block.png"), (self.position.x- camera.target.x + camera.offset.x, self.position.y- camera.target.y + camera.offset.y))
         elif self.texture == 3:
-            pygame.draw.rect(screen, "red", self.rect)
+            screen.blit(pygame.image.load("assets/brick block.png"), (self.position.x- camera.target.x + camera.offset.x, self.position.y- camera.target.y + camera.offset.y))
+        elif self.texture == 4:
+            screen.blit(pygame.image.load("assets/stone block.png"), (self.position.x- camera.target.x + camera.offset.x, self.position.y- camera.target.y + camera.offset.y))
