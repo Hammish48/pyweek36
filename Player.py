@@ -7,6 +7,7 @@ class Player():
         self.velocity = pygame.Vector2(0, 1)
         self.size = pygame.Vector2(30, 50)
         self.onFloor = False
+        self.bullets = []
     def physicsProcess(self, platforms):
         self.velocity.x = 0
         if pygame.key.get_pressed()[pygame.K_LEFT]:
