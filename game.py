@@ -26,13 +26,13 @@ class Game:
             x = 0
             for char in row:
                 if char == '1':
-                    self.platforms.append(Platform(x, y, 50, 50, "brown"))  # Adjust x, y, width, and height as needed
+                    self.platforms.append(Platform(x, y, 50, 50, 2))  # Adjust x, y, width, and height as needed
                     print(x, y, 50, 50)
                 if char == '2':
-                    self.platforms.append(Platform(x, y, 50, 50, "green"))  # Adjust x, y, width, and height as needed
+                    self.platforms.append(Platform(x, y, 50, 50, 1))
                     print(x, y, 50, 50)
                 if char == '3':
-                    self.platforms.append(Platform(x, y, 50, 50, "red"))
+                    self.platforms.append(Platform(x, y, 50, 50, 3))
                 x += 50  # Increment x position based on platform width
             y += 50  # Increment y position based on platform height
         
