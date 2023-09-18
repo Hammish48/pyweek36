@@ -66,11 +66,10 @@ class Player():
             # Calculate the length of the line
             line_length = math.sqrt(dx**2 + dy**2)
 
-            # only 10
-            if line_length > 20:
-                scale_factor = 20 / line_length
-                dx *= scale_factor
-                dy *= scale_factor
+            # only 20 px long
+            scale_factor = 20 / line_length
+            dx *= scale_factor
+            dy *= scale_factor
 
             
             new_point2 = (point1[0] + dx, point1[1] + dy)
