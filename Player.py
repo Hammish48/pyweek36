@@ -2,7 +2,7 @@ import pygame
 
 class Player():
     def __init__(self) -> None:
-        self.position = pygame.Vector2(10, -100)
+        self.position = pygame.Vector2(1120/2, 580/2)
         self.velocity = pygame.Vector2(0, 1)
         self.size = pygame.Vector2(30, 50)
         self.onFloor = False

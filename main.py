@@ -10,6 +10,7 @@ def main():
     fps = pygame.time.Clock()
     game = Game()
 
+    game.load_map("level_1")
     game.run(screen, fps)
     
 
