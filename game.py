@@ -50,7 +50,7 @@ class Game:
             # rendering
             screen.fill((255, 255, 255))
 
-            Player.render(self, screen)
+            Player.render(self, screen, self.platforms)
 
 
             for platform in self.platforms:
