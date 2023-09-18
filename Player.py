@@ -53,29 +53,52 @@ class Player():
         self.position += self.velocity
 
     def render(self, screen):
-            # bit of pythag
-            point1 = (self.player.position.x - self.camera.target.x + self.camera.offset.x + self.player.size.x, 
-                self.player.position.y - self.camera.target.y + self.camera.offset.y + self.player.size.y/2-10 )
+        pygame.draw.rect(screen, (0, 200, 20), pygame.Rect(self.player.position.x - self.camera.target.x + self.camera.offset.x, self.player.position.y - self.camera.target.y + self.camera.offset.y, self.player.size.x, self.player.size.y))
+        pygame.draw.rect(screen, (255, 7, 156), pygame.Rect(self.player.position.x- self.camera.target.x + self.camera.offset.x, self.player.position.y - self.camera.target.y + self.camera.offset.y + self.player.size.y, self.player.size.x, 1))
 
-            point2 = pygame.mouse.get_pos()
 
-            # Calculate the distance between the two points
-            dx = point2[0] - point1[0]
-            dy = point2[1] - point1[1]
+        # get pos of hand on player
+        hand_pos = pygame.math.Vector2(
+            self.player.position.x - self.camera.target.x + self.camera.offset.x + self.player.size.x - self.player.size.x/2, 
+            self.player.position.y - self.camera.target.y + self.camera.offset.y + self.player.size.y-30
+        )
 
-            # Calculate the length of the line
-            line_length = math.sqrt(dx**2 + dy**2)
+        # get cursor pos
+        cursor = pygame.math.Vector2(pygame.mouse.get_pos())
+        direction = cursor - hand_pos
 
-            # only 20 px long
-            scale_factor = 20 / line_length
-            dx *= scale_factor
-            dy *= scale_factor
+        if direction.x != 0 or direction.y != 0:
+            direction.normalize_ip()
+        
+        end = hand_pos + direction * 30
 
+        
+        angle = math.atan2(direction.x, direction.y)
+
+
+        pygame.draw.line(screen, "red", hand_pos, end, 10)
+
+
+        if pygame.mouse.get_pressed()[0] :
+            self.player.bullets.append([angle, self.player.position.x, self.player.position.y, 60])
+            print(self.player.bullets)
+
+        bullets_to_remove_indices = []  # Create a list to store the indices of bullets to be removed
+
+        for index, bullet in enumerate(self.player.bullets):
+            pygame.draw.circle(screen, "black", (
+                bullet[1] - self.camera.target.x + self.camera.offset.x + self.player.size.x - self.player.size.x / 2,
+                bullet[2] - self.camera.target.y + self.camera.offset.y + self.player.size.y - 30), 10)
             
-            new_point2 = (point1[0] + dx, point1[1] + dy)
+            bullet[1] = bullet[1] + 25 * math.sin(bullet[0])
+            bullet[2] = bullet[2] + 25 * math.cos(bullet[0])
+            bullet[3] -= 1
 
+            if bullet[3] == 0:
+                # Mark this bullet for removal by storing its index
+                bullets_to_remove_indices.append(index)
 
-            
-            pygame.draw.rect(screen, (0, 200, 20), pygame.Rect(self.player.position.x - self.camera.target.x + self.camera.offset.x, self.player.position.y - self.camera.target.y + self.camera.offset.y, self.player.size.x, self.player.size.y))
-            pygame.draw.rect(screen, (255, 7, 156), pygame.Rect(self.player.position.x- self.camera.target.x + self.camera.offset.x, self.player.position.y - self.camera.target.y + self.camera.offset.y + self.player.size.y, self.player.size.x, 1))
-            pygame.draw.line(screen, "red", point1 ,new_point2, 5)
+        # Remove the marked bullets in reverse order to avoid index issues
+        for index in reversed(bullets_to_remove_indices):
+            del self.player.bullets[index]
+
