@@ -66,7 +66,6 @@ class Player():
         self.position += self.velocity
 
     def render(self, screen, platforms):
-        player = pygame.image.load("assets\\player.png").convert_alpha()
         # pygame.draw.rect(screen, (0, 200, 20), pygame.Rect(self.player.position.x - self.camera.target.x + self.camera.offset.x, self.player.position.y - self.camera.target.y + self.camera.offset.y, self.player.size.x, self.player.size.y))
         screen.blit(self.sprite, self.position - camera.target + camera.offset)
 
