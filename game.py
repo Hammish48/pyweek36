@@ -34,6 +34,8 @@ class Game:
                     print(x, y, 50, 50)
                 if char == '3':
                     self.platforms.append(Platform(x, y, 50, 50, 3))
+                if char == '4':
+                    self.platforms.append(Platform(x, y, 50, 50, 4))
                 x += 50  # Increment x position based on platform width
             y += 50  # Increment y position based on platform height
         
