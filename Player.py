@@ -53,9 +53,30 @@ class Player():
         self.position += self.velocity
 
     def render(self, screen):
+            # bit of pythag
+            point1 = (self.player.position.x - self.camera.target.x + self.camera.offset.x + self.player.size.x, 
+                self.player.position.y - self.camera.target.y + self.camera.offset.y + self.player.size.y/2-10 )
+
+            point2 = pygame.mouse.get_pos()
+
+            # Calculate the distance between the two points
+            dx = point2[0] - point1[0]
+            dy = point2[1] - point1[1]
+
+            # Calculate the length of the line
+            line_length = math.sqrt(dx**2 + dy**2)
+
+            # only 10
+            if line_length > 20:
+                scale_factor = 20 / line_length
+                dx *= scale_factor
+                dy *= scale_factor
+
             
+            new_point2 = (point1[0] + dx, point1[1] + dy)
+
 
             
             pygame.draw.rect(screen, (0, 200, 20), pygame.Rect(self.player.position.x - self.camera.target.x + self.camera.offset.x, self.player.position.y - self.camera.target.y + self.camera.offset.y, self.player.size.x, self.player.size.y))
             pygame.draw.rect(screen, (255, 7, 156), pygame.Rect(self.player.position.x- self.camera.target.x + self.camera.offset.x, self.player.position.y - self.camera.target.y + self.camera.offset.y + self.player.size.y, self.player.size.x, 1))
-
+            pygame.draw.line(screen, "red", point1 ,new_point2, 5)
