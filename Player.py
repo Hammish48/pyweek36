@@ -1,4 +1,5 @@
 import pygame
+import math
 
 class Player():
     def __init__(self) -> None:
@@ -14,7 +15,7 @@ class Player():
             self.velocity.x += 5
             
         if not self.onFloor:
-            self.velocity.y += 0.5
+            self.velocity.y += 0.5 
         elif pygame.key.get_pressed()[pygame.K_UP]:
             self.onFloor = False
             self.velocity.y = -15
@@ -50,3 +51,11 @@ class Player():
                         self.position.x = platform.position.x + platform.size.x
 
         self.position += self.velocity
+
+    def render(self, screen):
+            
+
+            
+            pygame.draw.rect(screen, (0, 200, 20), pygame.Rect(self.player.position.x - self.camera.target.x + self.camera.offset.x, self.player.position.y - self.camera.target.y + self.camera.offset.y, self.player.size.x, self.player.size.y))
+            pygame.draw.rect(screen, (255, 7, 156), pygame.Rect(self.player.position.x- self.camera.target.x + self.camera.offset.x, self.player.position.y - self.camera.target.y + self.camera.offset.y + self.player.size.y, self.player.size.x, 1))
+
