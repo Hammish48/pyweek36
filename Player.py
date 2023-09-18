@@ -7,15 +7,25 @@ class Player():
         self.velocity = pygame.Vector2(0, 1)
         self.size = pygame.Vector2(30, 50)
         self.onFloor = False
+        self.forward = True
+        self.sprite = pygame.image.load("assets/player/walk 5.png")
         self.bullets = []
         self.shoot_cooldown = 0  # Initialize the cooldown timer to 0
         self.shoot_cooldown_duration = 30
     def physicsProcess(self, platforms):
         self.velocity.x = 0
-        if pygame.key.get_pressed()[pygame.K_a]:
+        if pygame.key.get_pressed()[pygame.K_LEFT]:
             self.velocity.x -= 5
-        if pygame.key.get_pressed()[pygame.K_d]:
+            if self.forward:
+                self.sprite = pygame.transform.flip(self.sprite, True, False)
+                print("fliped")
+            self.forward = False
+        if pygame.key.get_pressed()[pygame.K_RIGHT]:
             self.velocity.x += 5
+            if not self.forward:
+                self.sprite =pygame.transform.flip(self.sprite, True, False)
+                print("fliped")
+            self.forward = True
             
         if not self.onFloor:
             self.velocity.y += 0.5 
@@ -58,7 +68,7 @@ class Player():
     def render(self, screen, platforms):
         player = pygame.image.load("assets\\player.png").convert_alpha()
         # pygame.draw.rect(screen, (0, 200, 20), pygame.Rect(self.player.position.x - self.camera.target.x + self.camera.offset.x, self.player.position.y - self.camera.target.y + self.camera.offset.y, self.player.size.x, self.player.size.y))
-        screen.blit(player, (self.player.position.x - self.camera.target.x + self.camera.offset.x, self.player.position.y - self.camera.target.y + self.camera.offset.y))
+        screen.blit(self.sprite, self.position - camera.target + camera.offset)
 
         # get pos of hand on player
         hand_pos = pygame.math.Vector2(
