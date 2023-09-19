@@ -82,6 +82,6 @@ class GroundEnemy:
                     self.direction *= -1
         self.position.x += self.velocity.x * self.direction
         self.position.y += self.velocity.y
-        self.hitbox = pygame.Rect(self.position.x, self.position.x, self.size.x, self.size.y)
+        self.hitbox = pygame.Rect(self.position.x, self.position.y, self.size.x, self.size.y)
     def render(self, screen, camera):
         pygame.draw.rect(screen, (255, 255, 20), pygame.Rect(self.position.x - camera.target.x + camera.offset.x, self.position.y - camera.target.y + camera.offset.y, self.size.x, self.size.y))
