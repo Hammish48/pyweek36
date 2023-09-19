@@ -4,6 +4,7 @@ from Player import Player
 from Camera import Camera
 from Block import Platform
 from Enemies import *
+import math
 
 
 class Game:
@@ -12,7 +13,7 @@ class Game:
         self.camera = Camera(self.player.position, pygame.Vector2(560 - self.player.size.x/2, 290 - self.player.size.y/2))
         self.platforms = []
         self.flyingEnemies = [FlyingEnemy(200, 50, 1)]
-        self.groundEnemies = [GroundEnemy(150, -50)]
+        self.groundEnemies = [GroundEnemy(180, -50)]
         # self.map = []
         self.death = pygame.image.load("assets/death.png")
 
@@ -51,6 +52,8 @@ class Game:
                     main()
             # game logic
             if self.player.alive:
+                if self.player.health < 0:
+                    self .player.alive = False
                 self.player.physicsProcess(self.platforms)
                 for enemy in self.flyingEnemies:
                     enemy.fly(self.platforms)
@@ -68,8 +71,11 @@ class Game:
                     pygame.draw.rect(screen, (255, 0, 255), pygame.Rect(enemy.position.x - self.camera.target.x + self.camera.offset.x, enemy.position.y- self.camera.target.y + self.camera.offset.y, 50, 30))
                 for enemy in self.groundEnemies:
                     enemy.render(screen, self.camera)
-                    #if enemy.hitbox.colliderect(self.player.hitbox):
-                    #    print("dealt damage")
+                    if enemy.hitbox.colliderect(self.player.hitbox):
+                        print("dealt damage")
+                        self.player.health -= 3
+                
+                pygame.draw.rect(screen, (0, 255, 0), pygame.Rect(0, 0, (self.player.health/100)*1120, 10))
             else:
                 screen.blit(self.death, (0, 0))
 

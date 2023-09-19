@@ -14,6 +14,9 @@ class Player():
         self.shoot_cooldown_duration = 30
         self.animation = AnimationPlayer([AnimationFrame(pygame.image.load("assets/player/walk 1.png"), 10), AnimationFrame(pygame.image.load("assets/player/walk 2.png"), 3), AnimationFrame(pygame.image.load("assets/player/walk 3.png"), 4), AnimationFrame(pygame.image.load("assets/player/walk 4.png"), 6), AnimationFrame(pygame.image.load("assets/player/walk 5.png"), 6)])
         self.alive = True
+        self.hitbox = pygame.Rect(self.position.x + self.velocity.x, self.position.y + self.velocity.y, self.size.x, self.size.y)
+        self.health = 100
+    
     def physicsProcess(self, platforms):
         self.velocity.x = 0
         if pygame.key.get_pressed()[pygame.K_a]:
@@ -37,13 +40,14 @@ class Player():
             for platform in platforms:
                 if platform.hitbox.colliderect(pygame.Rect(self.position.x, self.position.y + self.size.y + 1, self.size.x, 1)):
                     self.onFloor = True
-                
+        
+        self.hitbox = pygame.Rect(self.position.x + self.velocity.x, self.position.y + self.velocity.y, self.size.x, self.size.y)
 
         # physics engine :DDDDDDD :)
         # the voices are getting louder
         for platform in platforms:
             # if player on next tick is in collision with platform
-            if pygame.Rect(self.position.x + self.velocity.x, self.position.y + self.velocity.y, self.size.x, self.size.y).colliderect(platform.hitbox):
+            if self.hitbox.colliderect(platform.hitbox):
                 print("Collision")
                 if self.position.x + self.size.x > platform.position.x and self.position.x < platform.position.x + platform.size.x:
                     # collision with top or bottom of player
