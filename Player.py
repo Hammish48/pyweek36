@@ -19,8 +19,23 @@ class Player():
         self.end = pygame.Vector2(1,1)
         self.angle = 0
         self.gun_tip = 0
+        self.infection = 0
     
     def physicsProcess(self, platforms, enemies, camera, flyingEnemies):
+        self.infection += 0.05
+        if self.infection > 100:
+            self.alive = False
+
+        for index, cure in enumerate(cures):
+            if self.hitbox.colliderect(cure.hitbox):
+                cures.pop(index)
+                if self.infection > 30:
+                    self.infection -= 30
+                else:
+                    self.infection = 0
+
+
+        
         self.velocity.x = 0
         if pygame.key.get_pressed()[pygame.K_a]:
             self.velocity.x -= 5
