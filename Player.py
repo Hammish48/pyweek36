@@ -12,6 +12,7 @@ class Player():
         self.bullets = []
         self.shoot_cooldown = 0  # Initialize the cooldown timer to 0
         self.shoot_cooldown_duration = 30
+        self.alive = True
     def physicsProcess(self, platforms):
         self.velocity.x = 0
         if pygame.key.get_pressed()[pygame.K_a]:
@@ -64,6 +65,11 @@ class Player():
                         self.position.x = platform.position.x + platform.size.x
 
         self.position += self.velocity
+
+        if self.velocity.y > 50:
+            # kill player
+            print("dead")
+            self.alive = False
 
     def render(self, screen, platforms, camera):
         # pygame.draw.rect(screen, (0, 200, 20), pygame.Rect(self.position.x - camera.target.x + camera.offset.x, self.position.y - camera.target.y + camera.offset.y, self.size.x, self.size.y))
