@@ -13,6 +13,7 @@ class Player():
         self.shoot_cooldown = 0  # Initialize the cooldown timer to 0
         self.shoot_cooldown_duration = 30
         self.animation = AnimationPlayer([AnimationFrame(pygame.image.load("assets/player/walk 1.png"), 10), AnimationFrame(pygame.image.load("assets/player/walk 2.png"), 3), AnimationFrame(pygame.image.load("assets/player/walk 3.png"), 4), AnimationFrame(pygame.image.load("assets/player/walk 4.png"), 6), AnimationFrame(pygame.image.load("assets/player/walk 5.png"), 6)])
+        self.alive = True
     def physicsProcess(self, platforms):
         self.velocity.x = 0
         if pygame.key.get_pressed()[pygame.K_a]:
@@ -62,6 +63,9 @@ class Player():
                         self.position.x = platform.position.x + platform.size.x
 
         self.position += self.velocity
+
+        if self.velocity.y > 50:
+            self.alive = False
 
     def render(self, screen, platforms, camera):
         # pygame.draw.rect(screen, (0, 200, 20), pygame.Rect(self.position.x - camera.target.x + camera.offset.x, self.position.y - camera.target.y + camera.offset.y, self.size.x, self.size.y))
