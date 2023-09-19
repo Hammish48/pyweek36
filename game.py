@@ -28,15 +28,15 @@ class Game:
             x = 0
             for char in row:
                 if char == '1':
-                    self.platforms.append(Platform(x, y, 50, 50, 2))  # Adjust x, y, width, and height as needed
+                    self.platforms.append(Platform(x, y, 50, 50, "dirt block"))  # Adjust x, y, width, and height as needed
                     print(x, y, 50, 50)
                 if char == '2':
-                    self.platforms.append(Platform(x, y, 50, 50, 1))
+                    self.platforms.append(Platform(x, y, 50, 50, "grass block"))
                     print(x, y, 50, 50)
                 if char == '3':
-                    self.platforms.append(Platform(x, y, 50, 50, 3))
+                    self.platforms.append(Platform(x, y, 50, 50, "brick block"))
                 if char == '4':
-                    self.platforms.append(Platform(x, y, 50, 50, 4))
+                    self.platforms.append(Platform(x, y, 50, 50, "stone block"))
                 x += 50  # Increment x position based on platform width
             y += 50  # Increment y position based on platform height
         
@@ -67,6 +67,8 @@ class Game:
                     platform.render(self.camera, screen)
                 for enemy in self.flyingEnemies:
                     pygame.draw.rect(screen, (255, 0, 255), pygame.Rect(enemy.position.x - self.camera.target.x + self.camera.offset.x, enemy.position.y- self.camera.target.y + self.camera.offset.y, 50, 30))
+                    #if self.flyingEnemies.hitbox.collideRect:
+
                 for enemy in self.groundEnemies:
                     enemy.render(screen, self.camera)
             else:
