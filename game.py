@@ -70,7 +70,7 @@ class Game:
                             self.player.health -= 20
                             enemy.projectiles.pop(index)
                         for platform in self.platforms:
-                            if pygame.Rect(projectile.position.x, projectile.position.y, 20, 20).colliderect(platform.hitbox):
+                            if pygame.Rect(projectile.position.x, projectile.position.y, 20, 20).colliderect(platform.hitbox) and len(enemy.projectiles):
                                 enemy.projectiles.pop(index)
                                 break
                 for enemy in self.groundEnemies:
@@ -94,7 +94,8 @@ class Game:
                 for cure in self.cures:
                     cure.render(self.camera, screen)
                 
-                pygame.draw.rect(screen, (0, 255, 0), pygame.Rect(0, 0, (self.player.health/100)*1120, 10))
+                pygame.draw.rect(screen, (0, 255, 0), pygame.Rect(0, 0, 10 ,(self.player.health/100)*580))
+                pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(0, 0, (self.player.infection/100)*1120, 10))
 
                 # places screen that slowly increses opacity - tied to infection
                 s = pygame.Surface((1120,580)) 

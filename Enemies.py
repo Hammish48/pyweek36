@@ -9,6 +9,9 @@ class FlyingEnemy:
         self.distance = 20
         self.cooldown = 0
         self.hitbox = pygame.Rect(x, y, 50, 30)
+        self.projectiles = []
+        self.shotCooldown = 0
+        self.health = 10
     def changedirection(self):
         r = random.randint(1, 6)
         self.cooldown = random.randint(0, 300)

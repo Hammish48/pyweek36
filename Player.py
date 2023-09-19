@@ -21,7 +21,7 @@ class Player():
         self.gun_tip = 0
         self.infection = 0
     
-    def physicsProcess(self, platforms, enemies, camera, flyingEnemies):
+    def physicsProcess(self, platforms, enemies, camera, flyingEnemies, cures):
         self.infection += 0.05
         if self.infection > 100:
             self.alive = False
@@ -131,9 +131,9 @@ class Player():
                     if enemy.health < 0:
                         enemies.pop(index)
                         print("ded enemy")
-             for index, enemy in enumerate(flyingEnemies):
+            for index, enemy in enumerate(flyingEnemies):
                 if enemy.hitbox.collidepoint(bullet.position):
-                    print("LIFE IS ROBLOC")
+                    print("\033[4m\033[92m\033[1mLIFE IS ROBLOC")
                     enemy.health -= 1
                     if enemy.health <= 0:
                         flyingEnemies.pop(index)
