@@ -4,6 +4,7 @@ from Player import Player
 from Camera import Camera
 from Block import Platform
 from Enemies import *
+from Cure import Cure
 import math
 
 
@@ -14,6 +15,7 @@ class Game:
         self.platforms = []
         self.flyingEnemies = [FlyingEnemy(200, 50, 1)]
         self.groundEnemies = [GroundEnemy(180, -50)]
+        self.cures = []
         # self.map = []
         self.death = pygame.image.load("assets/death.png")
 
@@ -39,6 +41,8 @@ class Game:
                     self.groundEnemies.append(GroundEnemy(x, y))
                 if char == '6':
                     self.flyingEnemies.append(FlyingEnemy(x, y, 1))
+                if char == 'c':
+                    self.cures.append(Cure(x, y))
                 x += 50  # Increment x position based on platform width
             y += 50  # Increment y position based on platform height
         
@@ -58,7 +62,7 @@ class Game:
             if self.player.alive:
                 if self.player.health < 0:
                     self .player.alive = False
-                self.player.physicsProcess(self.platforms, self.groundEnemies, self.camera)
+                self.player.physicsProcess(self.platforms, self.groundEnemies, self.camera, , self.cures)
                 for enemy in self.flyingEnemies:
                     enemy.fly(self.platforms, self.player)
                     for index, projectile in enumerate(enemy.projectiles):
@@ -83,8 +87,16 @@ class Game:
                     enemy.render(screen, self.camera)
                     if enemy.hitbox.colliderect(self.player.hitbox):
                         self.player.health -= 3
+                for cure in self.cures:
+                    cure.render(self.camera, screen)
                 
                 pygame.draw.rect(screen, (0, 255, 0), pygame.Rect(0, 0, (self.player.health/100)*1120, 10))
+
+                # places screen that slowly increses opacity - tied to infection
+                s = pygame.Surface((1120,580)) 
+                s.set_alpha((self.player.infection/100) * 255)     # alpha level
+                s.fill((0,random.randint(0, 5),random.randint(0, 5))) # epelepsy if too random?    
+                screen.blit(s, (0,0))
             else:
                 screen.blit(self.death, (0, 0))
 
