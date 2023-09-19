@@ -11,7 +11,7 @@ def main():
     game = Game()
 
     game.load_map("level_1")
-    game.run(screen, fps, main)
+    game.run(screen, fps)
     
 
 if __name__ == "__main__":
