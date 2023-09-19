@@ -88,18 +88,25 @@ class Game:
                 self.player.render(screen, self.platforms, self.camera, self.groundEnemies)
     
                 for platform in self.platforms:
+                    if math.hypot(platform.position.y - self.player.position.y, platform.position.x - self.player.position.x) > 750:
+                        continue
                     platform.render(self.camera, screen)
                 for enemy in self.flyingEnemies:
+                    if math.hypot(enemy.position.y - self.player.position.y, enemy.position.x - self.player.position.x) > 800:
+                        continue
                     screen.blit(enemy.sprite, (enemy.position.x - self.camera.target.x + self.camera.offset.x, enemy.position.y- self.camera.target.y + self.camera.offset.y))
                     #pygame.draw.rect(screen, (255, 0, 255), pygame.Rect(enemy.position.x - self.camera.target.x + self.camera.offset.x, enemy.position.y- self.camera.target.y + self.camera.offset.y, 50, 30))
                     for projectile in enemy.projectiles:
                         pygame.draw.rect(screen, (255, 255, 50), pygame.Rect(projectile.position.x - self.camera.target.x + self.camera.offset.x, projectile.position.y- self.camera.target.y + self.camera.offset.y, 20, 20))
                 for enemy in self.groundEnemies:
+                    if math.hypot(enemy.position.y - self.player.position.y, enemy.position.x - self.player.position.x) > 800:
+                        continue
                     enemy.render(screen, self.camera)
                     if enemy.hitbox.colliderect(self.player.hitbox):
                         self.player.health -= 3
                 for cure in self.cures:
                     cure.render(self.camera, screen)
+                
                 
                 pygame.draw.rect(screen, (0, 255, 0), pygame.Rect(0, 0, 10 ,(self.player.health/100)*580))
                 pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(0, 0, (self.player.infection/100)*1120, 10))
