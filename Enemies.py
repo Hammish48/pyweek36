@@ -1,5 +1,6 @@
 import pygame
 import random
+import math
 
 class FlyingEnemy:
     def __init__(self, x, y, direction) -> None:
