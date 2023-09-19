@@ -48,7 +48,7 @@ class Game:
             y += 50  # Increment y position based on platform height
         
     
-    def run(self,screen, fps, main):        
+    def run(self,screen, fps):        
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
