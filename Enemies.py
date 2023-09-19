@@ -26,9 +26,20 @@ class FlyingEnemy:
                     self.direction *= -1
             self.position.x += 1 * self.direction
             self.distance -= 1
-        print(math.hypot(player.position.y - self.position.y, player.position.x - self.position.x))
+        
+        # if the distance from the player is less than 450 px
+        if math.hypot(player.position.y - self.position.y, player.position.x - self.position.x) < 450:
+            if self.shotCooldown > 0:
+                self.shotCooldown -= 1
+            else:
+                direction = player.position - self.position
+                angle = math.atan2(direction.x, direction.y)
+                self.projectiles.append(Projectile(self.position.x, self.position.y, angle))
+                self.shotCooldown = 40
+        
+        for projectile in self.projectiles:
+            projectile.move()
         self.hitbox = pygame.Rect(self.position.x, self.position.y, 50, 30)
-
 
 
 
@@ -85,3 +96,21 @@ class GroundEnemy:
         self.hitbox = pygame.Rect(self.position.x, self.position.y, self.size.x, self.size.y)
     def render(self, screen, camera):
         pygame.draw.rect(screen, (255, 255, 20), pygame.Rect(self.position.x - camera.target.x + camera.offset.x, self.position.y - camera.target.y + camera.offset.y, self.size.x, self.size.y))
+
+
+class Projectile:
+    def __init__(self, x, y, angle):
+        self.position = pygame.Vector2(x + 15, y + 20)
+        self.angle = angle
+        self.life = 60
+    
+    def move(self):
+        self.position.x += 10 * math.sin(self.angle)
+        self.position.y += 10 * math.cos(self.angle)
+        self.life -= 1
+    
+    def draw(self, screen, camera):
+        pygame.draw.circle(screen, "black", (
+            self.position.x - camera.target.x + camera.offset.x + 15,
+            self.position.y - camera.target.y + camera.offset.y + 20)
+        , 5)
