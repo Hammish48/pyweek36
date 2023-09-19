@@ -14,4 +14,4 @@ class Platform:
             self.size.y
         )
         
-        screen.blit(pygame.image.load("assets/" + self.texture + ".png"), self.rect)
+        screen.blit(pygame.image.load("assets/" + self.texture + ".png").convert_alpha(), self.rect)
