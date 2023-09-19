@@ -36,11 +36,11 @@ class GroundEnemy:
         self.distance = 20
         self.cooldown = 0
         self.direction = 1
-        self.hitbox = pygame.Rect(x, y, 40, 40)
+        self.hitbox = pygame.Rect(x, y, self.size.x, self.size.y)
+        self.health = 3
     def changedirection(self):
-        r = random.randint(1, 6)
         self.cooldown = random.randint(0, 300)
-        if r not in [2, 4]:
+        if random.randint(1, 6) < 2:
             self.direction *= -1
         self.distance = random.randint(100, 800)
     def move(self, platforms):
@@ -63,7 +63,6 @@ class GroundEnemy:
                     self.onFloor = True
         for platform in platforms:
             if pygame.Rect(self.position.x + (self.velocity.x * self.direction), self.position.y + self.velocity.y, self.size.x, self.size.y).colliderect(platform.hitbox):
-                print("Collision")
                 if self.position.x + self.size.x > platform.position.x and self.position.x < platform.position.x + platform.size.x:
                     # collision with top or bottom of enemy
                     self.velocity.y = 0

@@ -50,7 +50,6 @@ class Player():
         for platform in platforms:
             # if player on next tick is in collision with platform
             if self.hitbox.colliderect(platform.hitbox):
-                print("Collision")
                 if self.position.x + self.size.x > platform.position.x and self.position.x < platform.position.x + platform.size.x:
                     # collision with top or bottom of player
                     self.velocity.y = 0
@@ -73,7 +72,7 @@ class Player():
         if self.velocity.y > 50:
             self.alive = False
 
-    def render(self, screen, platforms, camera):
+    def render(self, screen, platforms, camera, enemies):
         # pygame.draw.rect(screen, (0, 200, 20), pygame.Rect(self.position.x - camera.target.x + camera.offset.x, self.position.y - camera.target.y + camera.offset.y, self.size.x, self.size.y))
         if self.onFloor:
             if self.forward:
@@ -123,9 +122,14 @@ class Player():
             for platform in platforms:
                 if platform.hitbox.collidepoint(bullet.position):
                     self.bullets.pop(index)
+            for index, enemy in enumerate(enemies):
+                if enemy.hitbox.collidepoint(bullet.position):
+                    enemy.health -= 1
+                    if enemy.health < 0:
+                        enemies.pop(index)
+                        print("ded enemy")
             bullet.move()
             bullet.draw(screen, camera)
-
 
 
 class Bullet:
@@ -144,6 +148,3 @@ class Bullet:
             self.position.x - camera.target.x + camera.offset.x + 15,
             self.position.y - camera.target.y + camera.offset.y + 20)
         , 5)
-
-
-        

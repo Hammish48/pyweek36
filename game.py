@@ -29,10 +29,8 @@ class Game:
             for char in row:
                 if char == '1':
                     self.platforms.append(Platform(x, y, 50, 50, "dirt block"))  # Adjust x, y, width, and height as needed
-                    print(x, y, 50, 50)
                 if char == '2':
                     self.platforms.append(Platform(x, y, 50, 50, "grass block"))
-                    print(x, y, 50, 50)
                 if char == '3':
                     self.platforms.append(Platform(x, y, 50, 50, "brick block"))
                 if char == '4':
@@ -47,8 +45,7 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-                if not self.player.alive and pygame.mouse.get_pressed()[0]:
-                    print("ded")    
+                if not self.player.alive and pygame.mouse.get_pressed()[0]:  
                     main()
             # game logic
             if self.player.alive:
@@ -62,7 +59,7 @@ class Game:
                 # rendering
                 screen.fill((255, 255, 255))
     
-                self.player.render(screen, self.platforms, self.camera)
+                self.player.render(screen, self.platforms, self.camera, self.groundEnemies)
     
     
                 for platform in self.platforms:
