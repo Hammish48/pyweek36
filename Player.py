@@ -1,5 +1,6 @@
 import pygame
 import math
+from Animation import AnimationFrame, AnimationPlayer
 
 class Player():
     def __init__(self) -> None:
@@ -8,24 +9,20 @@ class Player():
         self.size = pygame.Vector2(30, 50)
         self.onFloor = False
         self.forward = True
-        self.sprite = pygame.image.load("assets/player/walk 5.png")
         self.bullets = []
         self.shoot_cooldown = 0  # Initialize the cooldown timer to 0
         self.shoot_cooldown_duration = 30
-        self.alive = True
+        self.animation = AnimationPlayer([AnimationFrame(pygame.image.load("assets/player/walk 1.png"), 10), AnimationFrame(pygame.image.load("assets/player/walk 2.png"), 3), AnimationFrame(pygame.image.load("assets/player/walk 3.png"), 4), AnimationFrame(pygame.image.load("assets/player/walk 4.png"), 6), AnimationFrame(pygame.image.load("assets/player/walk 5.png"), 6)])
     def physicsProcess(self, platforms):
         self.velocity.x = 0
         if pygame.key.get_pressed()[pygame.K_a]:
             self.velocity.x -= 5
-            if self.forward:
-                self.sprite = pygame.transform.flip(self.sprite, True, False)
-                print("fliped")
+            self.animation.tick()
             self.forward = False
+            
         if pygame.key.get_pressed()[pygame.K_d]:
             self.velocity.x += 5
-            if not self.forward:
-                self.sprite =pygame.transform.flip(self.sprite, True, False)
-                print("fliped")
+            self.animation.tick()
             self.forward = True
             
         if not self.onFloor:
@@ -66,14 +63,18 @@ class Player():
 
         self.position += self.velocity
 
-        if self.velocity.y > 50:
-            # kill player
-            print("dead")
-            self.alive = False
-
     def render(self, screen, platforms, camera):
         # pygame.draw.rect(screen, (0, 200, 20), pygame.Rect(self.position.x - camera.target.x + camera.offset.x, self.position.y - camera.target.y + camera.offset.y, self.size.x, self.size.y))
-        screen.blit(self.sprite, self.position - camera.target + camera.offset)
+        if self.onFloor:
+            if self.forward:
+                screen.blit(self.animation.getCurrentFrame(), self.position - camera.target + camera.offset)
+            else:
+                screen.blit(pygame.transform.flip(self.animation.getCurrentFrame(), True, False), self.position - camera.target + camera.offset)
+        else:
+            if self.forward:
+                screen.blit(pygame.image.load("./assets/player/jump.png"), self.position - camera.target + camera.offset)
+            else:
+                screen.blit(pygame.transform.flip(pygame.image.load("./assets/player/jump.png"), True, False), self.position - camera.target + camera.offset)
 
         # get pos of hand on player
         hand_pos = pygame.math.Vector2(
