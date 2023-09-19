@@ -16,6 +16,8 @@ class Player():
         self.alive = True
         self.hitbox = pygame.Rect(self.position.x + self.velocity.x, self.position.y + self.velocity.y, self.size.x, self.size.y)
         self.health = 100
+        self.end = pygame.Vector2(1,1)
+        self.angle = 0
     
     def physicsProcess(self, platforms):
         self.velocity.x = 0
@@ -97,18 +99,17 @@ class Player():
         if direction.x != 0 or direction.y != 0:
             direction.normalize_ip()
         
-        end = hand_pos + direction * 30
-
-        
-        angle = math.atan2(direction.x, direction.y)
-
-
-    
+        if (self.forward and math.atan2(direction.x, direction.y) > 0) or (not self.forward and math.atan2(direction.x, direction.y) < 0):
+            self.angle = math.atan2(direction.x, direction.y)
+            self.end = hand_pos + direction * 30
+        else:
+            self.forward = not self.forward
+            
 
 
         if pygame.mouse.get_pressed()[0] and self.shoot_cooldown == 0:
             # Check if the left mouse button is pressed and cooldown is zero
-            self.bullets.append([angle, self.position.x, self.position.y, 60])
+            self.bullets.append([self.angle, self.position.x, self.position.y, 60])
             print(self.bullets)
 
             # Set the cooldown timer to the cooldown duration
@@ -142,4 +143,4 @@ class Player():
             del self.bullets[index]
 
 
-        pygame.draw.line(screen, "black", hand_pos, end, 14)
+        pygame.draw.line(screen, "black", hand_pos, self.end, 5)
