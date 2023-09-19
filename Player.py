@@ -143,7 +143,7 @@ class Player():
 
 class Bullet:
     def __init__(self, x, y, angle):
-        self.position = pygame.Vector2(x, y)
+        self.position = pygame.Vector2(x + 15, y + 20)
         self.angle = angle
         self.life = 60
     
@@ -154,6 +154,6 @@ class Bullet:
     
     def draw(self, screen, camera):
         pygame.draw.circle(screen, "black", (
-            self.position.x - camera.target.x + camera.offset.x + 15,
-            self.position.y - camera.target.y + camera.offset.y + 20)
+            self.position.x - camera.target.x + camera.offset.x,
+            self.position.y - camera.target.y + camera.offset.y)
         , 5)
