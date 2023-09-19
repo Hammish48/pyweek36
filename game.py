@@ -51,7 +51,7 @@ class Game:
             if self.player.alive:
                 if self.player.health < 0:
                     self .player.alive = False
-                self.player.physicsProcess(self.platforms)
+                self.player.physicsProcess(self.platforms, self.groundEnemies, self.camera)
                 for enemy in self.flyingEnemies:
                     enemy.fly(self.platforms)
                 for enemy in self.groundEnemies:

@@ -18,8 +18,9 @@ class Player():
         self.health = 100
         self.end = pygame.Vector2(1,1)
         self.angle = 0
+        self.gun_tip = 0
     
-    def physicsProcess(self, platforms):
+    def physicsProcess(self, platforms, enemies, camera):
         self.velocity.x = 0
         if pygame.key.get_pressed()[pygame.K_a]:
             self.velocity.x -= 5
@@ -72,18 +73,7 @@ class Player():
         if self.velocity.y > 50:
             self.alive = False
 
-    def render(self, screen, platforms, camera, enemies):
-        # pygame.draw.rect(screen, (0, 200, 20), pygame.Rect(self.position.x - camera.target.x + camera.offset.x, self.position.y - camera.target.y + camera.offset.y, self.size.x, self.size.y))
-        if self.onFloor:
-            if self.forward:
-                screen.blit(self.animation.getCurrentFrame(), self.position - camera.target + camera.offset)
-            else:
-                screen.blit(pygame.transform.flip(self.animation.getCurrentFrame(), True, False), self.position - camera.target + camera.offset)
-        else:
-            if self.forward:
-                screen.blit(pygame.image.load("./assets/player/jump.png"), self.position - camera.target + camera.offset)
-            else:
-                screen.blit(pygame.transform.flip(pygame.image.load("./assets/player/jump.png"), True, False), self.position - camera.target + camera.offset)
+        # Gun Phys - move to another class? ----------------------------------------
 
         # get pos of hand on player
         hand_pos = pygame.math.Vector2(
@@ -103,9 +93,10 @@ class Player():
             self.end = hand_pos + direction * 30
         else:
             self.forward = not self.forward
-            
-        pygame.draw.line(screen, "black", hand_pos, end, 14)
 
+        self.gun_tip = hand_pos + direction * 30
+        angle = math.atan2(direction.x, direction.y)
+        # end
 
         if pygame.mouse.get_pressed()[0] and self.shoot_cooldown == 0:
             self.bullets.append(Bullet(self.position.x + direction.x, self.position.y + direction.y, angle))
@@ -124,8 +115,29 @@ class Player():
                     enemy.health -= 1
                     if enemy.health < 0:
                         enemies.pop(index)
-                        print("ded enemy")
+                        print("ded enemy")     
             bullet.move()
+        
+
+    def render(self, screen, platforms, camera, enemies):
+        # pygame.draw.rect(screen, (0, 200, 20), pygame.Rect(self.position.x - camera.target.x + camera.offset.x, self.position.y - camera.target.y + camera.offset.y, self.size.x, self.size.y))
+        if self.onFloor:
+            if self.forward:
+                screen.blit(self.animation.getCurrentFrame(), self.position - camera.target + camera.offset)
+            else:
+                screen.blit(pygame.transform.flip(self.animation.getCurrentFrame(), True, False), self.position - camera.target + camera.offset)
+        else:
+            if self.forward:
+                screen.blit(pygame.image.load("./assets/player/jump.png"), self.position - camera.target + camera.offset)
+            else:
+                screen.blit(pygame.transform.flip(pygame.image.load("./assets/player/jump.png"), True, False), self.position - camera.target + camera.offset)
+
+        pygame.draw.line(screen, "black", (
+            self.position.x - camera.target.x + camera.offset.x + self.size.x - self.size.x/2, 
+            self.position.y - camera.target.y + camera.offset.y + self.size.y-30
+        ), self.gun_tip, 14)
+
+        for bullet in self.bullets:
             bullet.draw(screen, camera)
 
 
