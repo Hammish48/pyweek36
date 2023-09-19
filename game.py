@@ -39,7 +39,7 @@ class Game:
             y += 50  # Increment y position based on platform height
         
     
-    def run(self,screen, fps):        
+    def run(self,screen, fps, main):        
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -48,7 +48,7 @@ class Game:
             if not self.player.alive and pygame.mouse.get_pressed()[0]:  
                 game = Game()
                 game.load_map("level_1")
-                game.run(screen, fps)                    
+                game.run(screen, fps, main)                    
                 print("aaaa")
             # game logic
             if self.player.alive:
