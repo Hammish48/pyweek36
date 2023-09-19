@@ -55,7 +55,10 @@ class Game:
                     pygame.quit()
                     sys.exit()
             if not self.player.alive and pygame.mouse.get_pressed()[0]:  
-                main() 
+                game = Game()
+                game.load_map("level_1")
+                game.run()
+
 
             # game logic
             if self.player.alive:
