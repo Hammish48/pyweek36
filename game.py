@@ -62,13 +62,17 @@ class Game:
             if self.player.alive:
                 if self.player.health < 0:
                     self .player.alive = False
-                self.player.physicsProcess(self.platforms, self.groundEnemies, self.camera, , self.cures)
+                self.player.physicsProcess(self.platforms, self.groundEnemies, self.camera, self.flyingEnemies, self.cures)
                 for enemy in self.flyingEnemies:
                     enemy.fly(self.platforms, self.player)
                     for index, projectile in enumerate(enemy.projectiles):
                         if pygame.Rect(projectile.position.x, projectile.position.y, 20, 20).colliderect(self.player.hitbox):
                             self.player.health -= 20
                             enemy.projectiles.pop(index)
+                        for platform in self.platforms:
+                            if pygame.Rect(projectile.position.x, projectile.position.y, 20, 20).colliderect(platform.hitbox):
+                                enemy.projectiles.pop(index)
+                                break
                 for enemy in self.groundEnemies:
                     enemy.move(self.platforms)
                 # rendering
