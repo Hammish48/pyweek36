@@ -103,9 +103,6 @@ class Player():
             self.end = hand_pos + direction * 30
         else:
             self.forward = not self.forward
-
-        end = hand_pos + direction * 30
-        angle = math.atan2(direction.x, direction.y)
             
         pygame.draw.line(screen, "black", hand_pos, end, 14)
 
