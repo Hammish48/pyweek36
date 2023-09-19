@@ -66,6 +66,8 @@ class Game:
                     self.player.alive = False
                 self.player.physicsProcess(self.platforms, self.groundEnemies, self.camera, self.flyingEnemies, self.cures)
                 for enemy in self.flyingEnemies:
+                    if math.hypot(enemy.position.y - self.player.position.y, enemy.position.x - self.player.position.x) > 1100:
+                        continue
                     enemy.fly(self.platforms, self.player)
                     for index, projectile in enumerate(enemy.projectiles):
                         if pygame.Rect(projectile.position.x, projectile.position.y, 20, 20).colliderect(self.player.hitbox):
@@ -76,6 +78,9 @@ class Game:
                                 enemy.projectiles.pop(index)
                                 break
                 for enemy in self.groundEnemies:
+                    if math.hypot(enemy.position.y - self.player.position.y, enemy.position.x - self.player.position.x) > 900:
+                        continue
+
                     enemy.move(self.platforms)
 
                 # rendering
