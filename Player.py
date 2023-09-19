@@ -135,7 +135,7 @@ class Player():
         pygame.draw.line(screen, "black", (
             self.position.x - camera.target.x + camera.offset.x + self.size.x - self.size.x/2, 
             self.position.y - camera.target.y + camera.offset.y + self.size.y-30
-        ), self.gun_tip, 14)
+        ), self.gun_tip, 7)
 
         for bullet in self.bullets:
             bullet.draw(screen, camera)
