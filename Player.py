@@ -20,7 +20,7 @@ class Player():
         self.angle = 0
         self.gun_tip = 0
     
-    def physicsProcess(self, platforms, enemies, camera):
+    def physicsProcess(self, platforms, enemies, camera, flyingEnemies):
         self.velocity.x = 0
         if pygame.key.get_pressed()[pygame.K_a]:
             self.velocity.x -= 5
@@ -115,7 +115,14 @@ class Player():
                     enemy.health -= 1
                     if enemy.health < 0:
                         enemies.pop(index)
-                        print("ded enemy")     
+                        print("ded enemy")
+             for index, enemy in enumerate(flyingEnemies):
+                if enemy.hitbox.collidepoint(bullet.position):
+                    print("LIFE IS ROBLOC")
+                    enemy.health -= 1
+                    if enemy.health <= 0:
+                        flyingEnemies.pop(index)
+                        print("DJ KHALID WE THE BEST MUSICCCC")
             bullet.move()
         
 
