@@ -14,14 +14,18 @@ class FlyingEnemy:
         if r not in [2, 4]:
             self.direction *= -1
         self.distance = random.randint(100, 800)
-    def fly(self, platforms):
+    def fly(self, platforms, player):
         if self.cooldown > 0:
             self.cooldown -= 1
         elif self.distance <= 0:
             self.changedirection()
         else:
+            for platform in platforms:
+                if platform.hitbox.colliderect(self.position.x + 1*self.direction, self.position.y, 50, 30):
+                    self.direction *= -1
             self.position.x += 1 * self.direction
             self.distance -= 1
+        print(math.hypot(player.position.y - self.position.y, player.position.x - self.position.x))
         self.hitbox = pygame.Rect(self.position.x, self.position.y, 50, 30)
 
 
