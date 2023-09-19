@@ -53,7 +53,7 @@ class Game:
                     self .player.alive = False
                 self.player.physicsProcess(self.platforms, self.groundEnemies, self.camera)
                 for enemy in self.flyingEnemies:
-                    enemy.fly(self.platforms)
+                    enemy.fly(self.platforms, self.player)
                 for enemy in self.groundEnemies:
                     enemy.move(self.platforms)
                 # rendering
