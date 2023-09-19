@@ -15,6 +15,7 @@ class Game:
         self.flyingEnemies = [FlyingEnemy(200, 50, 1)]
         self.groundEnemies = [GroundEnemy(150, -50)]
         # self.map = []
+        self.death = pygame.image.load("assets/death.png")
 
     def load_map(self, path):
         x = 0
@@ -40,30 +41,36 @@ class Game:
             y += 50  # Increment y position based on platform height
         
     
-    def run(self,screen, fps):        
+    def run(self,screen, fps, main):        
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+                if not self.player.alive and pygame.mouse.get_pressed()[0]:
+                    print("ded")    
+                    main()
             # game logic
-            self.player.physicsProcess(self.platforms)
-            for enemy in self.flyingEnemies:
-                enemy.fly(self.platforms)
-            for enemy in self.groundEnemies:
-                enemy.move(self.platforms)
-            # rendering
-            screen.fill((255, 255, 255))
-
-            self.player.render(screen, self.platforms, self.camera)
-
-
-            for platform in self.platforms:
-                platform.render(self.camera, screen)
-            for enemy in self.flyingEnemies:
-                pygame.draw.rect(screen, (255, 0, 255), pygame.Rect(enemy.position.x - self.camera.target.x + self.camera.offset.x, enemy.position.y- self.camera.target.y + self.camera.offset.y, 50, 30))
-            for enemy in self.groundEnemies:
-                enemy.render(screen, self.camera)
+            if self.player.alive:
+                self.player.physicsProcess(self.platforms)
+                for enemy in self.flyingEnemies:
+                    enemy.fly(self.platforms)
+                for enemy in self.groundEnemies:
+                    enemy.move(self.platforms)
+                # rendering
+                screen.fill((255, 255, 255))
+    
+                self.player.render(screen, self.platforms, self.camera)
+    
+    
+                for platform in self.platforms:
+                    platform.render(self.camera, screen)
+                for enemy in self.flyingEnemies:
+                    pygame.draw.rect(screen, (255, 0, 255), pygame.Rect(enemy.position.x - self.camera.target.x + self.camera.offset.x, enemy.position.y- self.camera.target.y + self.camera.offset.y, 50, 30))
+                for enemy in self.groundEnemies:
+                    enemy.render(screen, self.camera)
+            else:
+                screen.blit(self.death, (0, 0))
 
             fps.tick(60)
             pygame.display.update()
