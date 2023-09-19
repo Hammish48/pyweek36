@@ -39,14 +39,17 @@ class Game:
             y += 50  # Increment y position based on platform height
         
     
-    def run(self,screen, fps, main):        
+    def run(self,screen, fps):        
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-                if not self.player.alive and pygame.mouse.get_pressed()[0]:  
-                    main()
+            if not self.player.alive and pygame.mouse.get_pressed()[0]:  
+                game = Game()
+                game.load_map("level_1")
+                game.run(screen, fps)                    
+                print("aaaa")
             # game logic
             if self.player.alive:
                 if self.player.health < 0:
@@ -69,7 +72,6 @@ class Game:
                 for enemy in self.groundEnemies:
                     enemy.render(screen, self.camera)
                     if enemy.hitbox.colliderect(self.player.hitbox):
-                        print("dealt damage")
                         self.player.health -= 3
                 
                 pygame.draw.rect(screen, (0, 255, 0), pygame.Rect(0, 0, (self.player.health/100)*1120, 10))
