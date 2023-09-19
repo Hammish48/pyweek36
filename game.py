@@ -35,6 +35,10 @@ class Game:
                     self.platforms.append(Platform(x, y, 50, 50, "brick block"))
                 if char == '4':
                     self.platforms.append(Platform(x, y, 50, 50, "stone block"))
+                if char == '5':
+                    self.groundEnemies.append(GroundEnemy(x, y))
+                if char == '6':
+                    self.flyingEnemies.append(FlyingEnemy(x, y, 1))
                 x += 50  # Increment x position based on platform width
             y += 50  # Increment y position based on platform height
         
