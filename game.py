@@ -61,6 +61,10 @@ class Game:
                 self.player.physicsProcess(self.platforms, self.groundEnemies, self.camera)
                 for enemy in self.flyingEnemies:
                     enemy.fly(self.platforms, self.player)
+                    for index, projectile in enumerate(enemy.projectiles):
+                        if pygame.Rect(projectile.position.x, projectile.position.y, 20, 20).colliderect(self.player.hitbox):
+                            self.player.health -= 20
+                            enemy.projectiles.pop(index)
                 for enemy in self.groundEnemies:
                     enemy.move(self.platforms)
                 # rendering
@@ -73,6 +77,8 @@ class Game:
                     platform.render(self.camera, screen)
                 for enemy in self.flyingEnemies:
                     pygame.draw.rect(screen, (255, 0, 255), pygame.Rect(enemy.position.x - self.camera.target.x + self.camera.offset.x, enemy.position.y- self.camera.target.y + self.camera.offset.y, 50, 30))
+                    for projectile in enemy.projectiles:
+                        pygame.draw.rect(screen, (255, 255, 50), pygame.Rect(projectile.position.x - self.camera.target.x + self.camera.offset.x, projectile.position.y- self.camera.target.y + self.camera.offset.y, 20, 20))
                 for enemy in self.groundEnemies:
                     enemy.render(screen, self.camera)
                     if enemy.hitbox.colliderect(self.player.hitbox):
