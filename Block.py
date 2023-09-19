@@ -13,5 +13,10 @@ class Platform:
             self.size.x,
             self.size.y
         )
-        
+        pygame.draw.rect(screen, (0, 0, 0), pygame.Rect(
+            self.position.x - camera.target.x + camera.offset.x + 4,
+            self.position.y - camera.target.y + camera.offset.y + 4,
+            self.size.x,
+            self.size.y
+        ))
         screen.blit(pygame.image.load("assets/" + self.texture + ".png").convert_alpha(), self.rect)

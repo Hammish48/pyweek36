@@ -4,7 +4,7 @@ from Animation import AnimationFrame, AnimationPlayer
 
 class Player():
     def __init__(self) -> None:
-        self.position = pygame.Vector2(1120/2, 580/2)
+        self.position = pygame.Vector2(50, 20)
         self.velocity = pygame.Vector2(0, 1)
         self.size = pygame.Vector2(30, 50)
         self.onFloor = False
@@ -20,9 +20,10 @@ class Player():
         self.angle = 0
         self.gun_tip = 0
         self.infection = 0
+        self.infection_rate = 0.01
     
     def physicsProcess(self, platforms, enemies, camera, flyingEnemies, cures):
-        self.infection += 0.05
+        self.infection += self.infection_rate
         if self.infection > 100:
             self.alive = False
 
@@ -66,6 +67,10 @@ class Player():
         for platform in platforms:
             # if player on next tick is in collision with platform
             if self.hitbox.colliderect(platform.hitbox):
+                if platform.texture == "dark block":
+                    self.infection_rate = 0.3
+                else:
+                    self.infection_rate = 0.01
                 if self.position.x + self.size.x > platform.position.x and self.position.x < platform.position.x + platform.size.x:
                     # collision with top or bottom of player
                     self.velocity.y = 0
@@ -82,6 +87,7 @@ class Player():
                         self.position.x = platform.position.x - self.size.x
                     else:
                         self.position.x = platform.position.x + platform.size.x
+                
 
         self.position += self.velocity
 

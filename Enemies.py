@@ -11,7 +11,8 @@ class FlyingEnemy:
         self.hitbox = pygame.Rect(x, y, 50, 30)
         self.projectiles = []
         self.shotCooldown = 0
-        self.health = 10
+        self.health = 4
+        self.sprite = pygame.image.load("assets/flying enemy.png")
     def changedirection(self):
         r = random.randint(1, 6)
         self.cooldown = random.randint(0, 300)
@@ -77,9 +78,11 @@ class GroundEnemy:
             self.velocity.y += 0.5 
         if self.onFloor:
             self.onFloor = False
-            for platform in platforms:
+            for index, platform in enumerate(platforms):
                 if platform.hitbox.colliderect(pygame.Rect(self.position.x, self.position.y + self.size.y + 1, self.size.x, 1)):
                     self.onFloor = True
+                    if random.randint(0, 10)>5:
+                        platform.texture = "dark block"
         for platform in platforms:
             if pygame.Rect(self.position.x + (self.velocity.x * self.direction), self.position.y + self.velocity.y, self.size.x, self.size.y).colliderect(platform.hitbox):
                 if self.position.x + self.size.x > platform.position.x and self.position.x < platform.position.x + platform.size.x:
@@ -98,7 +101,7 @@ class GroundEnemy:
         self.position.y += self.velocity.y
         self.hitbox = pygame.Rect(self.position.x, self.position.y, self.size.x, self.size.y)
     def render(self, screen, camera):
-        pygame.draw.rect(screen, (255, 255, 20), pygame.Rect(self.position.x - camera.target.x + camera.offset.x, self.position.y - camera.target.y + camera.offset.y, self.size.x, self.size.y))
+        pygame.draw.rect(screen, (0, 0, 0), pygame.Rect(self.position.x - camera.target.x + camera.offset.x, self.position.y - camera.target.y + camera.offset.y, self.size.x, self.size.y))
 
 
 class Projectile:

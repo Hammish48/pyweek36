@@ -13,36 +13,37 @@ class Game:
         self.player = Player()
         self.camera = Camera(self.player.position, pygame.Vector2(560 - self.player.size.x/2, 290 - self.player.size.y/2))
         self.platforms = []
-        self.flyingEnemies = [FlyingEnemy(200, 50, 1)]
-        self.groundEnemies = [GroundEnemy(180, -50)]
+        self.flyingEnemies = []
+        self.groundEnemies = []
         self.cures = []
-        # self.map = []
         self.death = pygame.image.load("assets/death.png")
+        self.bg = pygame.image.load("assets/background.png")
 
     def load_map(self, path):
-        x = 0
+        with open(path + ".txt", "r") as f:
+            data = f.read().split("\n")
+
         y = 0
-        f = open(path + ".txt", "r")
-        data = f.read()
-        f.close()
-        data = data.split("\n")
         for row in data:
             x = 0
             for char in row:
-                if char == '1':
-                    self.platforms.append(Platform(x, y, 50, 50, "dirt block"))  # Adjust x, y, width, and height as needed
-                if char == '2':
-                    self.platforms.append(Platform(x, y, 50, 50, "grass block"))
-                if char == '3':
-                    self.platforms.append(Platform(x, y, 50, 50, "brick block"))
-                if char == '4':
-                    self.platforms.append(Platform(x, y, 50, 50, "stone block"))
-                if char == '5':
-                    self.groundEnemies.append(GroundEnemy(x, y))
-                if char == '6':
-                    self.flyingEnemies.append(FlyingEnemy(x, y, 1))
-                if char == 'c':
-                    self.cures.append(Cure(x, y))
+                match char:
+                    case '1':
+                        self.platforms.append(Platform(x, y, 50, 50, "dirt block"))
+                    case '2':
+                        self.platforms.append(Platform(x, y, 50, 50, "grass block"))
+                    case '3':
+                        self.platforms.append(Platform(x, y, 50, 50, "brick block"))
+                    case '4':
+                        self.platforms.append(Platform(x, y, 50, 50, "stone block"))
+                    case '5':
+                        self.groundEnemies.append(GroundEnemy(x, y))
+                    case '6':
+                        self.flyingEnemies.append(FlyingEnemy(x, y, 1))
+                    case 'c':
+                        self.cures.append(Cure(x, y))
+                    case 'i':
+                        self.cures.append(Platform(x, y, 50, 50, "dark block"))
                 x += 50  # Increment x position based on platform width
             y += 50  # Increment y position based on platform height
         
@@ -54,14 +55,12 @@ class Game:
                     pygame.quit()
                     sys.exit()
             if not self.player.alive and pygame.mouse.get_pressed()[0]:  
-                game = Game()
-                game.load_map("level_1")
-                game.run(screen, fps, main)                    
-                print("aaaa")
+                main() 
+
             # game logic
             if self.player.alive:
                 if self.player.health < 0:
-                    self .player.alive = False
+                    self.player.alive = False
                 self.player.physicsProcess(self.platforms, self.groundEnemies, self.camera, self.flyingEnemies, self.cures)
                 for enemy in self.flyingEnemies:
                     enemy.fly(self.platforms, self.player)
@@ -75,16 +74,24 @@ class Game:
                                 break
                 for enemy in self.groundEnemies:
                     enemy.move(self.platforms)
+
                 # rendering
                 screen.fill((52, 192, 255))
-    
+
+                for x in range(-2, 5):
+                    for y in range(-2, 5):
+                        screen.blit(self.bg, (
+                            self.player.position.x/3  - self.camera.target.x + self.camera.offset.x + (x*1120),
+                            self.player.position.y/3 - self.camera.target.y + self.camera.offset.y + (y*580))
+                        )
+                
                 self.player.render(screen, self.platforms, self.camera, self.groundEnemies)
-    
     
                 for platform in self.platforms:
                     platform.render(self.camera, screen)
                 for enemy in self.flyingEnemies:
-                    pygame.draw.rect(screen, (255, 0, 255), pygame.Rect(enemy.position.x - self.camera.target.x + self.camera.offset.x, enemy.position.y- self.camera.target.y + self.camera.offset.y, 50, 30))
+                    screen.blit(enemy.sprite, (enemy.position.x - self.camera.target.x + self.camera.offset.x, enemy.position.y- self.camera.target.y + self.camera.offset.y))
+                    #pygame.draw.rect(screen, (255, 0, 255), pygame.Rect(enemy.position.x - self.camera.target.x + self.camera.offset.x, enemy.position.y- self.camera.target.y + self.camera.offset.y, 50, 30))
                     for projectile in enemy.projectiles:
                         pygame.draw.rect(screen, (255, 255, 50), pygame.Rect(projectile.position.x - self.camera.target.x + self.camera.offset.x, projectile.position.y- self.camera.target.y + self.camera.offset.y, 20, 20))
                 for enemy in self.groundEnemies:
