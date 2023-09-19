@@ -104,43 +104,46 @@ class Player():
             self.end = hand_pos + direction * 30
         else:
             self.forward = not self.forward
+
+        end = hand_pos + direction * 30
+        angle = math.atan2(direction.x, direction.y)
             
+        pygame.draw.line(screen, "black", hand_pos, end, 14)
 
 
         if pygame.mouse.get_pressed()[0] and self.shoot_cooldown == 0:
-            # Check if the left mouse button is pressed and cooldown is zero
-            self.bullets.append([self.angle, self.position.x, self.position.y, 60])
-            print(self.bullets)
-
-            # Set the cooldown timer to the cooldown duration
+            self.bullets.append(Bullet(self.position.x + direction.x, self.position.y + direction.y, angle))
             self.shoot_cooldown = self.shoot_cooldown_duration
-
         if self.shoot_cooldown > 0:
             self.shoot_cooldown -= 1  # Decrement the cooldown timer
 
-
-
-        bullets_to_remove_indices = []  # Create a list to store the indices of bullets to be removed
-
         for index, bullet in enumerate(self.bullets):
-            pygame.draw.circle(screen, "black", (
-                bullet[1] - camera.target.x + camera.offset.x + self.size.x - self.size.x / 2,
-                bullet[2] - camera.target.y + camera.offset.y + self.size.y - 30), 5)
-            
-            bullet[1] = bullet[1] + 25 * math.sin(bullet[0])
-            bullet[2] = bullet[2] + 25 * math.cos(bullet[0])
-            bullet[3] -= 1
-
-            if bullet[3] == 0:
-                # Mark this bullet for removal by storing its index
-                bullets_to_remove_indices.append(index)
+            if bullet.life < 0:
+                self.bullets.pop(index)
             for platform in platforms:
-                if platform.hitbox.collidepoint((bullet[1], bullet[2])):
-                    bullets_to_remove_indices.append(index)
-
-        # Remove the marked bullets in reverse order to avoid index issues
-        for index in reversed(bullets_to_remove_indices):
-            del self.bullets[index]
+                if platform.hitbox.collidepoint(bullet.position):
+                    self.bullets.pop(index)
+            bullet.move()
+            bullet.draw(screen, camera)
 
 
-        pygame.draw.line(screen, "black", hand_pos, self.end, 5)
+
+class Bullet:
+    def __init__(self, x, y, angle):
+        self.position = pygame.Vector2(x, y)
+        self.angle = angle
+        self.life = 60
+    
+    def move(self):
+        self.position.x += 25 * math.sin(self.angle)
+        self.position.y += 25 * math.cos(self.angle)
+        self.life -= 1
+    
+    def draw(self, screen, camera):
+        pygame.draw.circle(screen, "black", (
+            self.position.x - camera.target.x + camera.offset.x + 15,
+            self.position.y - camera.target.y + camera.offset.y + 20)
+        , 5)
+
+
+        
