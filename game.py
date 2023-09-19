@@ -57,7 +57,7 @@ class Game:
                 for enemy in self.groundEnemies:
                     enemy.move(self.platforms)
                 # rendering
-                screen.fill((255, 255, 255))
+                screen.fill((52, 192, 255))
     
                 self.player.render(screen, self.platforms, self.camera, self.groundEnemies)
     
