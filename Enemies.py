@@ -81,7 +81,7 @@ class GroundEnemy:
             for index, platform in enumerate(platforms):
                 if platform.hitbox.colliderect(pygame.Rect(self.position.x, self.position.y + self.size.y + 1, self.size.x, 1)):
                     self.onFloor = True
-                    if random.randint(0, 10)>5:
+                    if random.randint(0, 1000) < 0.05:
                         platform.texture = "dark block"
         for platform in platforms:
             if pygame.Rect(self.position.x + (self.velocity.x * self.direction), self.position.y + self.velocity.y, self.size.x, self.size.y).colliderect(platform.hitbox):
