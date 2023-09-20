@@ -6,6 +6,7 @@ from Block import Platform
 from Enemies import *
 from Cure import Cure
 import math
+import UI
 
 
 class Game:
@@ -54,11 +55,6 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-            if not self.player.alive and pygame.mouse.get_pressed()[0]:  
-                game = Game()
-                game.load_map("level_1")
-                game.run(screen, fps)
-
 
             # game logic
             if self.player.alive:
@@ -128,7 +124,8 @@ class Game:
                 s.fill((0,random.randint(0, 5),random.randint(0, 5))) # epelepsy if too random?    
                 screen.blit(s, (0,0))
             else:
-                screen.blit(self.death, (0, 0))
+                death = UI.DeathScreen()
+                death.show(screen, fps, Game)
 
             fps.tick(60)
             pygame.display.update()
