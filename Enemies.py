@@ -1,6 +1,7 @@
 import pygame
 import random
 import math
+from Animation import AnimationFrame, AnimationPlayer
 
 class FlyingEnemy:
     def __init__(self, x, y, direction) -> None:
@@ -12,7 +13,7 @@ class FlyingEnemy:
         self.projectiles = []
         self.shotCooldown = 0
         self.health = 4
-        self.sprite = pygame.image.load("assets/flying enemy.png")
+        self.animation = AnimationPlayer([AnimationFrame(pygame.image.load("./assets/flying enemy flap 1.png"), 30), AnimationFrame(pygame.image.load("./assets/flying enemy flap 2.png"), 30)])
     def changedirection(self):
         r = random.randint(1, 6)
         self.cooldown = random.randint(0, 300)
