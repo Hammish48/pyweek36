@@ -57,7 +57,7 @@ class Game:
             if not self.player.alive and pygame.mouse.get_pressed()[0]:  
                 game = Game()
                 game.load_map("level_1")
-                game.run()
+                game.run(screen, fps)
 
 
             # game logic
