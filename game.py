@@ -102,8 +102,11 @@ class Game:
                 for enemy in self.flyingEnemies:
                     if math.hypot(enemy.position.y - self.player.position.y, enemy.position.x - self.player.position.x) > 800:
                         continue
-                    screen.blit(enemy.sprite, (enemy.position.x - self.camera.target.x + self.camera.offset.x, enemy.position.y- self.camera.target.y + self.camera.offset.y))
-                    #pygame.draw.rect(screen, (255, 0, 255), pygame.Rect(enemy.position.x - self.camera.target.x + self.camera.offset.x, enemy.position.y- self.camera.target.y + self.camera.offset.y, 50, 30))
+                    enemy.animation.tick()
+                    if enemy.direction > 0:
+                        screen.blit(pygame.transform.flip(enemy.animation.getCurrentFrame(), True, False), (enemy.position.x - self.camera.target.x + self.camera.offset.x, enemy.position.y- self.camera.target.y + self.camera.offset.y))
+                    else:
+                        screen.blit(enemy.animation.getCurrentFrame(), (enemy.position.x - self.camera.target.x + self.camera.offset.x, enemy.position.y- self.camera.target.y + self.camera.offset.y))
                     for projectile in enemy.projectiles:
                         pygame.draw.rect(screen, (255, 255, 50), pygame.Rect(projectile.position.x - self.camera.target.x + self.camera.offset.x, projectile.position.y- self.camera.target.y + self.camera.offset.y, 20, 20))
                 for enemy in self.groundEnemies:
