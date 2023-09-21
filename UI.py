@@ -1,6 +1,6 @@
 import pygame
 import sys
-
+import math
 class Button:
     def __init__(self, x, y, width, height) -> None:
         self.position = pygame.Vector2(x, y)
@@ -63,7 +63,7 @@ class GameUI:
             if platform.dark:
                 dark += 1
         drawText(screen, f"blocks left to cure: {dark}", 0, 550, 20, color=(255, 255, 255))
-        drawText(screen, f"FPS: {clock.get_fps()}", 0, 570, 20, color=(255, 255, 255))
+        drawText(screen, f"FPS: {math.ceil(clock.get_fps())}", 0, 570, 20, color=(255, 255, 255))
         infectionBar = InfoBar(60,510 , 230, 10, player.infection)
         healthBar = InfoBar(60, 490, 230, 10, player.health)
         pygame.draw.rect(screen, (0, 255, 0), healthBar.getRenderObject())
