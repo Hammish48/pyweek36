@@ -81,8 +81,8 @@ class Game:
 
                 # rendering
 
-                for x in range(-2, 4):
-                    for y in range(-2, 4):
+                for x in range(-2, 3):
+                    for y in range(-2, 3):
                         screen.blit(self.bg, (
                             self.player.position.x/3  - self.camera.target.x + self.camera.offset.x + (x*1120),
                             self.player.position.y/3 - self.camera.target.y + self.camera.offset.y + (y*580))
