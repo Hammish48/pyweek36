@@ -13,17 +13,14 @@ class Button:
         return False
     def show(self, screen):
         pygame.draw.rect(screen, (0, 255, 0), pygame.Rect(self.position.x, self.position.y, self.width, self.height))
-        
-
-
 
 
 class DeathScreen:
     def __init__(self) -> None:
         pass
     def show(self, screen, fps, game):
-        restart = Button(200, 425, 220, 100)
-        quit = Button(450, 425, 220, 100)
+        restart = Button(210, 430, 200, 90)
+        quit = Button(457, 430, 200, 90) 
         screen.blit(pygame.image.load("./assets/death.png"), (0,0))
         pygame.display.update()
         while (1):
