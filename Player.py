@@ -12,7 +12,7 @@ class Player():
         self.bullets = []
         self.shoot_cooldown = 0  # Initialize the cooldown timer to 0
         self.shoot_cooldown_duration = 30
-        self.animation = AnimationPlayer([AnimationFrame(pygame.image.load("assets/player/walk 1.png"), 10), AnimationFrame(pygame.image.load("assets/player/walk 2.png"), 3), AnimationFrame(pygame.image.load("assets/player/walk 3.png"), 4), AnimationFrame(pygame.image.load("assets/player/walk 4.png"), 6), AnimationFrame(pygame.image.load("assets/player/walk 5.png"), 6)])
+        self.animation = AnimationPlayer([AnimationFrame(pygame.image.load("assets/player/walk 1.png").convert_alpha(), 10), AnimationFrame(pygame.image.load("assets/player/walk 2.png").convert_alpha(), 3), AnimationFrame(pygame.image.load("assets/player/walk 3.png").convert_alpha(), 4), AnimationFrame(pygame.image.load("assets/player/walk 4.png").convert_alpha(), 6), AnimationFrame(pygame.image.load("assets/player/walk 5.png").convert_alpha(), 6)])
         self.alive = True
         self.hitbox = pygame.Rect(self.position.x + self.velocity.x, self.position.y + self.velocity.y, self.size.x, self.size.y)
         self.health = 100
@@ -166,18 +166,21 @@ class Gun:
                 if platform.hitbox.collidepoint(bullet.position):
                     hit = bullet.position
                     bullets.pop(indx)
+                    break
             for index, enemy in enumerate(enemies):
                 if enemy.hitbox.collidepoint(bullet.position):
                     enemy.health -= self.bullet_damage
                     if enemy.health < 0:
                         enemies.pop(index)
                     bullets.pop(indx)
+                    break
             for index, enemy in enumerate(flyingEnemies):
                 if enemy.hitbox.collidepoint(bullet.position):
                     enemy.health -= self.bullet_damage
                     if enemy.health <= 0:
                         flyingEnemies.pop(index)
                     bullets.pop(indx)
+                    break
             bullet.move()
         if hit != False:
             for platform in platforms:
