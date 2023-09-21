@@ -34,9 +34,9 @@ class Game:
                     case '2':
                         self.platforms.append(Platform(x, y, 50, 50, "grass block"))
                     case '3':
-                        self.platforms.append(Platform(x, y, 50, 50, "brick block"))
+                        self.platforms.append(Platform(x, y, 50, 50, "brick block", "dark brick block"))
                     case '4':
-                        self.platforms.append(Platform(x, y, 50, 50, "stone block"))
+                        self.platforms.append(Platform(x, y, 50, 50, "stone block", "dark stone block"))
                     case '5':
                         self.groundEnemies.append(GroundEnemy(x, y))
                     case '6':
@@ -80,10 +80,9 @@ class Game:
                     enemy.move(self.platforms)
 
                 # rendering
-                screen.fill((52, 192, 255))
 
-                for x in range(-2, 5):
-                    for y in range(-2, 5):
+                for x in range(-2, 4):
+                    for y in range(-2, 4):
                         screen.blit(self.bg, (
                             self.player.position.x/3  - self.camera.target.x + self.camera.offset.x + (x*1120),
                             self.player.position.y/3 - self.camera.target.y + self.camera.offset.y + (y*580))
@@ -92,11 +91,11 @@ class Game:
                 self.player.render(screen, self.platforms, self.camera, self.groundEnemies)
     
                 for platform in self.platforms:
-                    if math.hypot(platform.position.y - self.player.position.y, platform.position.x - self.player.position.x) > 750:
+                    if math.hypot(platform.position.y - self.player.position.y, platform.position.x - self.player.position.x) > 670:
                         continue
                     platform.render(self.camera, screen)
                 for enemy in self.flyingEnemies:
-                    if math.hypot(enemy.position.y - self.player.position.y, enemy.position.x - self.player.position.x) > 800:
+                    if math.hypot(enemy.position.y - self.player.position.y, enemy.position.x - self.player.position.x) > 700:
                         continue
                     enemy.animation.tick()
                     if enemy.direction > 0:
@@ -106,7 +105,7 @@ class Game:
                     for projectile in enemy.projectiles:
                         pygame.draw.rect(screen, (255, 255, 50), pygame.Rect(projectile.position.x - self.camera.target.x + self.camera.offset.x, projectile.position.y- self.camera.target.y + self.camera.offset.y, 20, 20))
                 for enemy in self.groundEnemies:
-                    if math.hypot(enemy.position.y - self.player.position.y, enemy.position.x - self.player.position.x) > 800:
+                    if math.hypot(enemy.position.y - self.player.position.y, enemy.position.x - self.player.position.x) > 700:
                         continue
                     enemy.render(screen, self.camera)
                     if enemy.hitbox.colliderect(self.player.hitbox):
@@ -116,10 +115,10 @@ class Game:
                 
 
                 # places screen that slowly increses opacity - tied to infection
-                s = pygame.Surface((1120,580)) 
-                s.set_alpha((self.player.infection/100) * 165 + 90)     # alpha level
-                s.fill((0,random.randint(0, 5),random.randint(0, 5))) # epelepsy if too random?    
-                screen.blit(s, (0,0))
+                #s = pygame.Surface((1120,580)) 
+                #s.set_alpha((self.player.infection/100) * 165 + 90)     # alpha level
+                #s.fill((0,random.randint(0, 5),random.randint(0, 5))) # epelepsy if too random?    
+                #screen.blit(s, (0,0))
                 UI.GameUI.show(screen, self.player, self, fps) 
                 
             else:
