@@ -101,6 +101,10 @@ class Player():
             self.alive = False
 
         self.gun.physics(self.position, camera)
+        if self.gun.angle > 0:
+            self.forward = True
+        else:
+            self.forward = False
         self.gun.check_bullet_collisions(self.bullets, platforms, enemies, flyingEnemies)
         
 
