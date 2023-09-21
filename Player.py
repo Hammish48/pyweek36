@@ -173,7 +173,7 @@ class Gun:
                     enemy.health -= self.bullet_damage
                     if enemy.health <= 0:
                         flyingEnemies.pop(index)
-                    bullets.pop(index)
+                    bullets.pop(indx)
             bullet.move()
         if hit != False:
             for platform in platforms:
