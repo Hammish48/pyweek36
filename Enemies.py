@@ -14,7 +14,6 @@ class FlyingEnemy:
         self.shotCooldown = 0
         self.health = 4
         self.animation = AnimationPlayer([AnimationFrame(pygame.image.load("./assets/flying enemy flap 1.png"), 30), AnimationFrame(pygame.image.load("./assets/flying enemy flap 2.png"), 30)])
-        self.sprite = pygame.image.load("assets/ground enemy.png")
     def changedirection(self):
         r = random.randint(1, 6)
         self.cooldown = random.randint(0, 300)
@@ -60,6 +59,7 @@ class GroundEnemy:
         self.direction = 1
         self.hitbox = pygame.Rect(x, y, self.size.x, self.size.y)
         self.health = 3
+        self.sprite = pygame.image.load("assets/ground enemy.png")
     def changedirection(self):
         self.cooldown = random.randint(0, 300)
         if random.randint(1, 6) < 2:
