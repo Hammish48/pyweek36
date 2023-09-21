@@ -120,7 +120,7 @@ class Game:
 
                 # places screen that slowly increses opacity - tied to infection
                 s = pygame.Surface((1120,580)) 
-                s.set_alpha((self.player.infection/100) * 255)     # alpha level
+                s.set_alpha((self.player.infection/100) * 165 + 90)     # alpha level
                 s.fill((0,random.randint(0, 5),random.randint(0, 5))) # epelepsy if too random?    
                 screen.blit(s, (0,0))
             else:
