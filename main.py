@@ -1,6 +1,7 @@
 import pygame
 import sys
 from game import Game
+from startup import Startup
 
 pygame.init()
 
@@ -9,6 +10,9 @@ def main():
     pygame.display.set_caption("caption")
     fps = pygame.time.Clock()
     game = Game()
+    startup = Startup()
+
+    startup.run(screen, fps)
 
     game.load_map("level_1")
     game.run(screen, fps)
