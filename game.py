@@ -81,12 +81,20 @@ class Game:
 
                 # rendering
 
-                for x in range(-2, 3):
-                    for y in range(-2, 3):
+                c = 0
+                for x in range(-5, 5):
+                    if self.player.position.x/3 + (x*1120) - self.player.position.x > 1000 or self.player.position.x/3 + (x*1120) - self.player.position.x < -1800:
+                        c+= 10
+                        continue
+                    for y in range(-5, 5):
+                        if self.player.position.y/3 + y*580 - self.player.position.y > 600 or self.player.position.y/3 + y*580 - self.player.position.y > 600 < -1000:
+                            c += 1
+                            continue
                         screen.blit(self.bg, (
                             self.player.position.x/3  - self.camera.target.x + self.camera.offset.x + (x*1120),
                             self.player.position.y/3 - self.camera.target.y + self.camera.offset.y + (y*580))
                         )
+                print(c)
                 
                 self.player.render(screen, self.platforms, self.camera, self.groundEnemies)
     
