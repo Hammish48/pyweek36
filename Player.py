@@ -21,7 +21,7 @@ class Player():
         self.tip = 0
         self.infection = 0
         self.infection_rate = 0.01
-        self.gun = Gun(0, 10, 90, "black", 2, 30, 1)
+        self.gun = Gun(0, 10, 90, "white", 2, 30, 1)
     
     def physicsProcess(self, platforms, enemies, camera, flyingEnemies, cures):
         self.infection += self.infection_rate
