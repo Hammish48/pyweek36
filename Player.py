@@ -18,11 +18,10 @@ class Player():
         self.health = 100
         self.end = pygame.Vector2(1,1)
         self.angle = 0
-        self.gun_tip = 0
+        self.tip = 0
         self.infection = 0
         self.infection_rate = 0.01
-        self.gun = Gun(0, 10, 5, "blue", 2, 30, 1)
-        self.gun2 = Gun(0, 200, 300, "red", 10, 3, 10)
+        self.gun = Gun(0, 10, 90, "black", 2, 30, 1)
     
     def physicsProcess(self, platforms, enemies, camera, flyingEnemies, cures):
         self.infection += self.infection_rate
@@ -44,11 +43,6 @@ class Player():
             self.gun.shoot(self.bullets)
         if self.gun.cooldown > 0:
             self.gun.cooldown -= 1  # Decrement the cooldown timer
-        if pygame.mouse.get_pressed()[2] and self.gun2.cooldown == 0:
-            self.gun2.shoot(self.bullets)
-        if self.gun2.cooldown > 0:
-            self.gun2.cooldown -= 1  # Decrement the cooldown timer
-    
 
         if pygame.key.get_pressed()[pygame.K_a]:
             self.velocity.x -= 5
@@ -79,7 +73,7 @@ class Player():
         for platform in platforms:
             # if player on next tick is in collision with platform
             if self.hitbox.colliderect(platform.hitbox):
-                if platform.texture == "dark block":
+                if platform.dark:
                     self.infection_rate = 0.3
                 else:
                     self.infection_rate = 0.01
@@ -108,9 +102,6 @@ class Player():
 
         self.gun.physics(self.position, camera)
         self.gun.check_bullet_collisions(self.bullets, platforms, enemies, flyingEnemies)
-
-        self.gun2.physics(self.position, camera)
-        self.gun2.check_bullet_collisions(self.bullets, platforms, enemies, flyingEnemies)
         
 
     def render(self, screen, platforms, camera, enemies):
@@ -127,19 +118,18 @@ class Player():
                 screen.blit(pygame.transform.flip(pygame.image.load("./assets/player/jump.png"), True, False), self.position - camera.target + camera.offset)
 
         self.gun.render(screen, camera)
-        self.gun2.render(screen, camera)
 
         for bullet in self.bullets:
             bullet.render(screen, camera)
 
 
 class Gun:
-    def __init__(self, gun_type = 0, cooldown_time = 30, bullet_life = 60, color = "red", bullet_size = 5, bullet_speed = 25, bullet_damage = 1):
+    def __init__(self, type = 0, cooldown_time = 30, bullet_life = 60, color = "red", bullet_size = 5, bullet_speed = 25, bullet_damage = 1):
         self.player_pos = pygame.Vector2(0, 0)
-        self.gun_type = gun_type
+        self.type = type
         self.cursor_pos = pygame.mouse.get_pos()
-        self.gun_tip = (0, 0)
-        self.gun_angle = 0
+        self.tip = (0, 0)
+        self.angle = 0
         self.cooldown = 30
         self.cooldown_time = cooldown_time
         self.bullet_life = bullet_life
@@ -160,31 +150,40 @@ class Gun:
         if direction != (0, 0):
             direction.normalize_ip()
 
-        self.gun_tip = pos + direction * 30
-        self.gun_angle = math.atan2(direction.x, direction.y)
+        self.tip = pos + direction * 30
+        self.angle = math.atan2(direction.x, direction.y)
     
     def check_bullet_collisions(self, bullets, platforms, enemies, flyingEnemies):
-        for index, bullet in enumerate(bullets):
+        hit = False
+        for indx, bullet in enumerate(bullets):
             if bullet.life < 0:
-                bullets.pop(index)
+                bullets.pop(indx)
             for platform in platforms:
                 if platform.hitbox.collidepoint(bullet.position):
-                    bullets.pop(index-1)
+                    hit = bullet.position
+                    bullets.pop(indx)
             for index, enemy in enumerate(enemies):
                 if enemy.hitbox.collidepoint(bullet.position):
                     enemy.health -= self.bullet_damage
                     if enemy.health < 0:
                         enemies.pop(index)
-                        print("ded enemy")
+                    bullets.pop(indx)
             for index, enemy in enumerate(flyingEnemies):
                 if enemy.hitbox.collidepoint(bullet.position):
                     enemy.health -= self.bullet_damage
                     if enemy.health <= 0:
                         flyingEnemies.pop(index)
+                    bullets.pop(index)
             bullet.move()
+        if hit != False:
+            for platform in platforms:
+                if platform.dark:
+                    if math.hypot(platform.position.y - hit.y, platform.position.x - hit.x) < 250:
+                        platform.dark = False
+
 
     def shoot(self, bullets):
-        bullets.append(Bullet(self.player_pos.x, self.player_pos.y, self.gun_angle, self.bullet_life, self.bullet_speed, self.color, self.bullet_size))
+        bullets.append(Bullet(self.player_pos.x, self.player_pos.y, self.angle, self.bullet_life, self.bullet_speed, self.color, self.bullet_size))
         self.cooldown = self.cooldown_time
     
 
@@ -192,7 +191,7 @@ class Gun:
         pygame.draw.line(screen, self.color, (
             self.player_pos.x - camera.target.x + camera.offset.x + 15, 
             self.player_pos.y - camera.target.y + camera.offset.y + 20
-        ), self.gun_tip , 7)
+        ), self.tip , 7)
 
 
 class Bullet:
