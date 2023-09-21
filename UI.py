@@ -22,11 +22,9 @@ class DeathScreen:
     def __init__(self) -> None:
         pass
     def show(self, screen, fps, game):
-        restart = Button(100, 100, 200, 100)
-        quit = Button(400, 200, 200, 100)
+        restart = Button(200, 425, 220, 100)
+        quit = Button(450, 425, 220, 100)
         screen.blit(pygame.image.load("./assets/death.png"), (0,0))
-        quit.show(screen)
-        restart.show(screen)
         pygame.display.update()
         while (1):
             for event in pygame.event.get():
