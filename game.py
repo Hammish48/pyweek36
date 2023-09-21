@@ -114,15 +114,14 @@ class Game:
                 for cure in self.cures:
                     cure.render(self.camera, screen)
                 
-                
-                pygame.draw.rect(screen, (0, 255, 0), pygame.Rect(0, 0, 10 ,(self.player.health/100)*580))
-                pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(0, 0, (self.player.infection/100)*1120, 10))
 
                 # places screen that slowly increses opacity - tied to infection
                 s = pygame.Surface((1120,580)) 
                 s.set_alpha((self.player.infection/100) * 165 + 90)     # alpha level
                 s.fill((0,random.randint(0, 5),random.randint(0, 5))) # epelepsy if too random?    
                 screen.blit(s, (0,0))
+                UI.GameUI.show(screen, self.player, self, fps) 
+                
             else:
                 death = UI.DeathScreen()
                 death.show(screen, fps, Game)
