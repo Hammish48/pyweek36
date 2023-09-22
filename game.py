@@ -25,9 +25,9 @@ class Game:
         with open(path + ".txt", "r") as f:
             data = f.read().split("\n")
 
-        y = 0
+        y = -500
         for row in data:
-            x = 0
+            x = -2750
             for char in row:
                 match char:
                     case '1':
