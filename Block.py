@@ -8,7 +8,7 @@ class Platform:
         "brick block":pygame.image.load("assets/" + "brick block" + ".png").convert_alpha()
     }
     darktextures = {
-        "dark block":pygame.image.load("assets/" + "dirt block" + ".png").convert_alpha(),
+        "dark block":pygame.image.load("assets/" + "dark block" + ".png").convert_alpha(),
         "dark stone block":pygame.image.load("assets/" + "dark stone block" + ".png").convert_alpha(),
         "dark brick block":pygame.image.load("assets/" + "dark brick block" + ".png").convert_alpha()
     }
