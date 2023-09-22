@@ -26,8 +26,8 @@ class Player():
     def physicsProcess(self, platforms, enemies, camera, flyingEnemies, cures, healthboosts):
         self.velocity.x = 0
         
-        if self.infection > 100:
-            self.alive = False
+        if self.infection > 70:
+            self.health -= 0.2
 
         for index, cure in enumerate(cures):
             if self.hitbox.colliderect(cure.hitbox):
@@ -100,8 +100,9 @@ class Player():
                         self.position.x = platform.position.x - self.size.x
                     else:
                         self.position.x = platform.position.x + platform.size.x
-        print(self.infection_rate)
         self.infection += self.infection_rate
+        if self.infection > 100:
+            self.infection = 100
 
         self.position += self.velocity
 
