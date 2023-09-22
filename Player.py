@@ -23,8 +23,7 @@ class Player():
         self.infection_rate = 0.01
         self.gun = Gun(0, 10, 90, "white", 2, 30, 1)
     
-    def physicsProcess(self, platforms, enemies, camera, flyingEnemies, cures):
-        self.infection += self.infection_rate
+    def physicsProcess(self, platforms, enemies, camera, flyingEnemies, cures, healthboosts):
         self.velocity.x = 0
         
         if self.infection > 100:
@@ -37,6 +36,13 @@ class Player():
                     self.infection -= 30
                 else:
                     self.infection = 0
+        for index, boost in enumerate(healthboosts):
+            if self.hitbox.colliderect(boost.hitbox):
+                healthboosts.pop(index)
+                if self.health < 60:
+                    self.health += 40
+                else:
+                    self.health = 100
 
         # user Input
         if pygame.mouse.get_pressed()[0] and self.gun.cooldown == 0:
@@ -65,6 +71,10 @@ class Player():
             for platform in platforms:
                 if platform.hitbox.colliderect(pygame.Rect(self.position.x, self.position.y + self.size.y + 1, self.size.x, 1)):
                     self.onFloor = True
+                    if platform.dark:
+                        self.infection_rate = 0.3
+                    else:
+                        self.infection_rate = 0.01
         
         self.hitbox = pygame.Rect(self.position.x + self.velocity.x, self.position.y + self.velocity.y, self.size.x, self.size.y)
 
@@ -73,10 +83,7 @@ class Player():
         for platform in platforms:
             # if player on next tick is in collision with platform
             if self.hitbox.colliderect(platform.hitbox):
-                if platform.dark:
-                    self.infection_rate = 0.3
-                else:
-                    self.infection_rate = 0.01
+                
                 if self.position.x + self.size.x > platform.position.x and self.position.x < platform.position.x + platform.size.x:
                     # collision with top or bottom of player
                     self.velocity.y = 0
@@ -93,11 +100,12 @@ class Player():
                         self.position.x = platform.position.x - self.size.x
                     else:
                         self.position.x = platform.position.x + platform.size.x
-                
+        print(self.infection_rate)
+        self.infection += self.infection_rate
 
         self.position += self.velocity
 
-        if self.velocity.y > 50:
+        if self.velocity.y > 100:
             self.alive = False
 
         self.gun.physics(self.position, camera)
