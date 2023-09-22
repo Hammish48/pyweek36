@@ -242,7 +242,7 @@ class Gun:
         if hit != False:
             for platform in platforms:
                 if platform.dark:
-                    if math.hypot(platform.position.y - hit.y, platform.position.x - hit.x) < 200:
+                    if math.hypot(platform.position.y - hit.y, platform.position.x - hit.x) < 150:
                         platform.dark = False
 
 
