@@ -47,8 +47,8 @@ class DeathScreen:
                 g.run(screen, fps)
             fps.tick(30)
 
-def drawText(screen, text, x, y, size, font="Helvetica-Bold.ttf", color=(0,0,0)):
-    screen.blit(pygame.font.Font(f"./assets/{font}").render(text, True, color), (x, y))
+def drawText(screen, text = "Hello, World", x = 0, y = 0, size = 10, font="Helvetica-Bold.ttf", color=(0,0,0)):
+    screen.blit(pygame.font.Font(f"./assets/{font}", size).render((text), True, color), (x, y))
 
 class GameUI:
     def __init__(self) -> None:
