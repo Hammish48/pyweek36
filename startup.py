@@ -18,13 +18,18 @@ class Startup:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-                if event.type == pygame.MOUSEBUTTONDOWN and self.card < self.cards:
+                if event.type == pygame.MOUSEBUTTONDOWN and self.card < self.cards and self.card > 0:
                     self.card += 1
 
 
             match self.card:
                 case 0:
-                    drawText(screen, "main menu", 100, 100)
+                    screen.blit(pygame.image.load("assets/main.png"), (0, 0))
+                    if Button(45, 270, 180, 700).onClick():
+                        self.card += 1
+                    if Button(160, 380, 180, 700).onClick():
+                        pygame.quit()
+                        sys.exit()
                 case 1:
                     screen.blit(pygame.image.load("assets/startup_1.png"), (0, 0))
                 case 2:
