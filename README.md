@@ -1,14 +1,13 @@
 # pyweek no.36
 
 ### Status
-Simple falling player with camera system
+game is nearly finished
 
 ### Overal Idea of the game
-----------------
+this game revolves around a player in a landscape filled with dark matter and enemies
+the player has to traverse the landscape eleminating enemies and curing the world
+if the player gets to infected, it will die
 
 
 ### Theme
 Dark Matter
-
-### Idea board
-[google docs](https://docs.google.com/document/d/1sHaK17vQjojO0yizMM0dID3EAk36uE7sal8P1u1s_1w/edit)
