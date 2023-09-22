@@ -28,7 +28,7 @@ class Startup:
                 case 1:
                     screen.blit(pygame.image.load("assets/startup_1.png"), (0, 0))
                 case 2:
-                    drawText(screen, "cut scene no 2", 100, 100)
+                    screen.blit(pygame.image.load("assets/startup_2.png"), (0, 0))
                 case 3:
                     self.startup = False
        
