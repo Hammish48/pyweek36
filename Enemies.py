@@ -114,8 +114,8 @@ class Projectile:
         self.life = 60
     
     def move(self):
-        self.position.x += 10 * math.sin(self.angle)
-        self.position.y += 10 * math.cos(self.angle)
+        self.position.x += 7 * math.sin(self.angle)
+        self.position.y += 7 * math.cos(self.angle)
         self.life -= 1
     
     def draw(self, screen, camera):
