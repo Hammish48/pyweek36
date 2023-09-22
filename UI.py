@@ -55,6 +55,7 @@ class GameUI:
         pass
     def show(screen, player, game, clock):
         pygame.draw.rect(screen, (0,0,0), pygame.Rect(0, 480, 320, 100))
+        pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(0, 0, 120, 10))
         drawText(screen, f"position: {player.position.x}, {player.position.y}")
         drawText(screen, "heath", 0, 490, 12, color=(255, 255, 255))
         drawText(screen, "infection", 0, 510, 12, color=(255, 255, 255))
