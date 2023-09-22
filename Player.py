@@ -212,6 +212,7 @@ class Gun:
             pos = bullet.position
             if bullet.life < 0:
                 bullets.pop(indx)
+                break
             for platform in platforms:
                 if platform.hitbox.collidepoint(bullet.position):
                     hit = bullet.position
