@@ -71,6 +71,7 @@ class Game:
                     for index, projectile in enumerate(enemy.projectiles):
                         if pygame.Rect(projectile.position.x, projectile.position.y, 20, 20).colliderect(self.player.hitbox):
                             self.player.health -= 20
+                            self.player.infection += 8
                             enemy.projectiles.pop(index)
                         for platform in self.platforms:
                             if pygame.Rect(projectile.position.x, projectile.position.y, 20, 20).colliderect(platform.hitbox) and len(enemy.projectiles):
@@ -116,7 +117,8 @@ class Game:
                         continue
                     enemy.render(screen, self.camera)
                     if enemy.hitbox.colliderect(self.player.hitbox):
-                        self.player.health -= 3
+                        self.player.health -= .5
+                        self.player.infection += .5
                 for cure in self.cures:
                     cure.render(self.camera, screen)
                 for healthboost in self.healthboosts:
@@ -137,3 +139,4 @@ class Game:
 
             fps.tick(60)
             pygame.display.update()
+
