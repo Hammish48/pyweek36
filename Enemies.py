@@ -40,7 +40,7 @@ class FlyingEnemy:
                 direction = player.position - self.position
                 angle = math.atan2(direction.x, direction.y)
                 self.projectiles.append(Projectile(self.position.x, self.position.y, angle))
-                self.shotCooldown = 55
+                self.shotCooldown = 60
         
         for projectile in self.projectiles:
             projectile.move()
@@ -83,7 +83,7 @@ class GroundEnemy:
             for index, platform in enumerate(platforms):
                 if platform.hitbox.colliderect(pygame.Rect(self.position.x, self.position.y + self.size.y + 1, self.size.x, 1)):
                     self.onFloor = True
-                    if random.randint(0, 1000) < 0.05:
+                    if random.randint(0, 700) == 2:
                         platform.dark = True
         for platform in platforms:
             if pygame.Rect(self.position.x + (self.velocity.x * self.direction), self.position.y + self.velocity.y, self.size.x, self.size.y).colliderect(platform.hitbox):
@@ -97,7 +97,7 @@ class GroundEnemy:
                         self.position.y = platform.position.y + platform.size.y
 
                 if self.position.y + self.size.y > platform.position.y and self.position.y < platform.position.y + platform.size.y:
-                    # collision with side of player
+                    # collision with side of block
                     self.direction *= -1
         self.position.x += self.velocity.x * self.direction
         self.position.y += self.velocity.y
