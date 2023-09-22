@@ -40,7 +40,7 @@ class FlyingEnemy:
                 direction = player.position - self.position
                 angle = math.atan2(direction.x, direction.y)
                 self.projectiles.append(Projectile(self.position.x, self.position.y, angle))
-                self.shotCooldown = 60
+                self.shotCooldown = 55
         
         for projectile in self.projectiles:
             projectile.move()
