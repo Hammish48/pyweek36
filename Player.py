@@ -2,6 +2,46 @@ import pygame
 import math
 from Animation import AnimationFrame, AnimationPlayer
 
+from pygame.locals import *
+
+from pygame.sprite import Group
+from Animation import AnimationFrame, AnimationPlayer
+
+from pygame import mixer
+mixer.init()
+explosion_fx = pygame.mixer.Sound("assets\shoot\shoot.wav")
+
+
+class Explosion(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        explosion_fx.play()
+        pygame.sprite.Sprite.__init__(self)
+        self.images = []
+        for num in range(1, 5):
+            img = pygame.image.load(f"assets/shoot/{num}.png")
+            pygame.transform.scale(img, (100, 100))
+            self.images.append(img)
+        self.index = 0
+        self.image = self.images[self.index]
+        self.rect = self.image.get_rect()
+        self.rect.center = [x, y]
+        self.counter = 0
+
+    def update(self):
+        explosion_speed = 4
+        self.counter += 1
+
+        if self.counter >= explosion_speed and self.index < len(self.images) -1:
+            self.counter = 0
+            self.index += 1
+            self.image = self.images[self.index]
+
+        if self.index >= len(self.images) - 1 and self.counter >= explosion_speed:
+            self.kill()
+
+explosion_group = pygame.sprite.Group()
+
+
 class Player():
     def __init__(self) -> None:
         self.position = pygame.Vector2(50, 20)
@@ -21,7 +61,7 @@ class Player():
         self.tip = 0
         self.infection = 0
         self.infection_rate = 0.01
-        self.gun = Gun(0, 10, 90, "white", 2, 30, 1)
+        self.gun = Gun(0, 10, 30, "white", 2, 30, 1)
     
     def physicsProcess(self, platforms, enemies, camera, flyingEnemies, cures, healthboosts):
         self.velocity.x = 0
@@ -114,7 +154,7 @@ class Player():
             self.forward = True
         else:
             self.forward = False
-        self.gun.check_bullet_collisions(self.bullets, platforms, enemies, flyingEnemies)
+        self.gun.check_bullet_collisions(self.bullets, platforms, enemies, flyingEnemies, camera)
         
 
     def render(self, screen, platforms, camera, enemies):
@@ -166,15 +206,18 @@ class Gun:
         self.tip = pos + direction * 30
         self.angle = math.atan2(direction.x, direction.y)
     
-    def check_bullet_collisions(self, bullets, platforms, enemies, flyingEnemies):
+    def check_bullet_collisions(self, bullets, platforms, enemies, flyingEnemies, camera):
         hit = False
         for indx, bullet in enumerate(bullets):
+            pos = bullet.position
             if bullet.life < 0:
                 bullets.pop(indx)
             for platform in platforms:
                 if platform.hitbox.collidepoint(bullet.position):
                     hit = bullet.position
                     bullets.pop(indx)
+                    explosion = Explosion(pos.x - camera.target.x + camera.offset.x, pos.y - camera.target.y + camera.offset.y)
+                    explosion_group.add(explosion)
                     break
             for index, enemy in enumerate(enemies):
                 if enemy.hitbox.collidepoint(bullet.position):
@@ -182,6 +225,8 @@ class Gun:
                     if enemy.health < 0:
                         enemies.pop(index)
                     bullets.pop(indx)
+                    explosion = Explosion(pos.x - camera.target.x + camera.offset.x, pos.y - camera.target.y + camera.offset.y)
+                    explosion_group.add(explosion)
                     break
             for index, enemy in enumerate(flyingEnemies):
                 if enemy.hitbox.collidepoint(bullet.position):
@@ -189,6 +234,8 @@ class Gun:
                     if enemy.health <= 0:
                         flyingEnemies.pop(index)
                     bullets.pop(indx)
+                    explosion = Explosion(pos.x - camera.target.x + camera.offset.x, pos.y - camera.target.y + camera.offset.y)
+                    explosion_group.add(explosion)
                     break
             bullet.move()
         if hit != False:
@@ -204,6 +251,9 @@ class Gun:
     
 
     def render(self, screen, camera):
+        explosion_group.draw(screen)
+        explosion_group.update()
+        
         pygame.draw.line(screen, self.color, (
             self.player_pos.x - camera.target.x + camera.offset.x + 15, 
             self.player_pos.y - camera.target.y + camera.offset.y + 20
