@@ -110,7 +110,11 @@ class Game:
                         screen.blit(enemy.animation.getCurrentFrame(), (enemy.position.x - self.camera.target.x + self.camera.offset.x, enemy.position.y- self.camera.target.y + self.camera.offset.y))
                     for projectile in enemy.projectiles:
                         pygame.draw.rect(screen, (255, 255, 50), pygame.Rect(projectile.position.x - self.camera.target.x + self.camera.offset.x, projectile.position.y- self.camera.target.y + self.camera.offset.y, 20, 20))
-                for enemy in self.groundEnemies:
+                for index, enemy in enumerate(self.groundEnemies):
+                    print(enemy.velocity.y)
+                    if enemy.velocity.y > 15:
+                        self.groundEnemies.pop(index)
+                        continue
                     if math.hypot(enemy.position.y - self.player.position.y, enemy.position.x - self.player.position.x) > 700:
                         continue
                     enemy.render(screen, self.camera)
