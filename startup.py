@@ -1,26 +1,7 @@
 import pygame
 import sys
 import math
-
-
-class Button:
-    def __init__(self, x, y, width, height) -> None:
-        self.position = pygame.Vector2(x, y)
-        self.height = height
-        self.width = width
-    def onClick(self):
-        if not pygame.Rect(self.position.x, self.position.y, self.width, self.height).collidepoint(pygame.mouse.get_pos()):
-            return False
-        if pygame.mouse.get_pressed()[0]:
-            return True
-        return False
-    def show(self, screen):
-        pygame.draw.rect(screen, (0, 255, 0), pygame.Rect(self.position.x, self.position.y, self.width, self.height))
-
-def drawText(screen, text = "Hello, World.", x = 0, y = 0, size = 10, font="Helvetica-Bold.ttf", color=(0,0,0)):
-    screen.blit(pygame.font.Font(f"./assets/{font}").render(text, True, color), (x, y))
-
-
+from UI import drawText, Button
 
 class Startup:
     def __init__(self) -> None:
