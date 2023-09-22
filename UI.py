@@ -55,17 +55,18 @@ class GameUI:
         pass
     def show(screen, player, game, clock):
         pygame.draw.rect(screen, (0,0,0), pygame.Rect(0, 480, 320, 100))
-        drawText(screen, "heath", 0, 490, 20, color=(255, 255, 255))
-        drawText(screen, "infection", 0, 510, 20, color=(255, 255, 255))
-        drawText(screen, f"enemies left: {len(game.flyingEnemies) + len(game.groundEnemies)}", 0, 530, 20, color=(255, 255, 255))
+        drawText(screen, f"position: {player.position.x}, {player.position.y}")
+        drawText(screen, "heath", 0, 490, 12, color=(255, 255, 255))
+        drawText(screen, "infection", 0, 510, 12, color=(255, 255, 255))
+        drawText(screen, f"enemies left: {len(game.flyingEnemies) + len(game.groundEnemies)}", 0, 530, 12, color=(255, 255, 255))
         dark = 0
         for platform in game.platforms:
             if platform.dark:
                 dark += 1
-        drawText(screen, f"blocks left to cure: {dark}", 0, 550, 20, color=(255, 255, 255))
-        drawText(screen, f"FPS: {math.ceil(clock.get_fps())}", 0, 570, 20, color=(255, 255, 255))
-        infectionBar = InfoBar(60,510 , 230, 10, player.infection)
-        healthBar = InfoBar(60, 490, 230, 10, player.health)
+        drawText(screen, f"blocks left to cure: {dark}", 0, 550, 12, color=(255, 255, 255))
+        drawText(screen, f"FPS: {math.ceil(clock.get_fps())}", 0, 570, 12, color=(255, 255, 255))
+        infectionBar = InfoBar(60,512 , 230, 10, player.infection)
+        healthBar = InfoBar(60, 492, 230, 10, player.health)
         pygame.draw.rect(screen, (0, 255, 0), healthBar.getRenderObject())
         pygame.draw.rect(screen, (255, 0, 0), infectionBar.getRenderObject())
 
