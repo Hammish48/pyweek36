@@ -7,7 +7,7 @@ from Enemies import *
 from Cure import Cure
 import math
 import UI
-
+from Healthboost import HealthBoost
 
 class Game:
     def __init__(self) -> None:
@@ -19,6 +19,7 @@ class Game:
         self.cures = []
         self.death = pygame.image.load("assets/death.png")
         self.bg = pygame.image.load("assets/background.png")
+        self.healthboosts = []
 
     def load_map(self, path):
         with open(path + ".txt", "r") as f:
@@ -45,6 +46,8 @@ class Game:
                         self.cures.append(Cure(x, y))
                     case 'i':
                         self.cures.append(Platform(x, y, 50, 50, "dark block"))
+                    case 'h':
+                        self.healthboosts.append(HealthBoost(x, y))
                 x += 50  # Increment x position based on platform width
             y += 50  # Increment y position based on platform height
         
@@ -60,7 +63,7 @@ class Game:
             if self.player.alive:
                 if self.player.health < 0:
                     self.player.alive = False
-                self.player.physicsProcess(self.platforms, self.groundEnemies, self.camera, self.flyingEnemies, self.cures)
+                self.player.physicsProcess(self.platforms, self.groundEnemies, self.camera, self.flyingEnemies, self.cures, self.healthboosts)
                 for enemy in self.flyingEnemies:
                     if math.hypot(enemy.position.y - self.player.position.y, enemy.position.x - self.player.position.x) > 1100:
                         continue
@@ -83,11 +86,9 @@ class Game:
 
                 for x in range(-5, 5):
                     if self.player.position.x/3 + (x*1120) - self.player.position.x > 1000 or self.player.position.x/3 + (x*1120) - self.player.position.x < -1800:
-                        c+= 10
                         continue
                     for y in range(-5, 5):
                         if self.player.position.y/3 + y*580 - self.player.position.y > 600 or self.player.position.y/3 + y*580 - self.player.position.y  < -1000:
-                            c += 1
                             continue
                         screen.blit(self.bg, (
                             self.player.position.x/3  - self.camera.target.x + self.camera.offset.x + (x*1120),
@@ -118,13 +119,16 @@ class Game:
                         self.player.health -= 3
                 for cure in self.cures:
                     cure.render(self.camera, screen)
+                for healthboost in self.healthboosts:
+                    healthboost.render(screen, self.camera)
                 
 
                 # places screen that slowly increses opacity - tied to infection
-                s = pygame.Surface((1120,580)) 
-                s.set_alpha((self.player.infection/100) * 165 + 90)     # alpha level
-                s.fill((0,random.randint(0, 5),random.randint(0, 5))) # epelepsy if too random?    
-                screen.blit(s, (0,0))
+                if self.player.infection > 60:
+                    s = pygame.Surface((1120,580)) 
+                    s.set_alpha((self.player.infection/160) * 165 + 90)     # alpha level
+                    s.fill((0,random.randint(0, 5),random.randint(0, 5))) # epelepsy if too random?    
+                    screen.blit(s, (0,0))
                 UI.GameUI.show(screen, self.player, self, fps) 
                 
             else:
