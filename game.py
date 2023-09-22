@@ -95,8 +95,6 @@ class Game:
                             self.player.position.x/3  - self.camera.target.x + self.camera.offset.x + (x*1120),
                             self.player.position.y/3 - self.camera.target.y + self.camera.offset.y + (y*580))
                         )
-                
-                self.player.render(screen, self.platforms, self.camera, self.groundEnemies)
     
                 for platform in self.platforms:
                     if math.hypot(platform.position.y - self.player.position.y, platform.position.x - self.player.position.x) > 670:
@@ -123,7 +121,8 @@ class Game:
                     cure.render(self.camera, screen)
                 for healthboost in self.healthboosts:
                     healthboost.render(screen, self.camera)
-                
+
+                self.player.render(screen, self.platforms, self.camera, self.groundEnemies)
 
                 # places screen that slowly increses opacity - tied to infection
                 if self.player.infection > 60:
