@@ -1,6 +1,9 @@
 import pygame
 import sys
 import math
+import startup
+
+endscreen = pygame.image.load("assets/end screen.png")
 class Button:
     def __init__(self, x, y, width, height) -> None:
         self.position = pygame.Vector2(x, y)
@@ -60,16 +63,28 @@ class GameUI:
         drawText(screen, "heath", 0, 490, 12, color=(255, 255, 255))
         drawText(screen, "infection", 0, 510, 12, color=(255, 255, 255))
         drawText(screen, f"enemies left: {len(game.flyingEnemies) + len(game.groundEnemies)}", 0, 530, 12, color=(255, 255, 255))
-        dark = 0
-        for platform in game.platforms:
-            if platform.dark:
-                dark += 1
-        drawText(screen, f"blocks left to cure: {dark}", 0, 550, 12, color=(255, 255, 255))
+        drawText(screen, f"blocks left to cure: {game.dark}", 0, 550, 12, color=(255, 255, 255))
         drawText(screen, f"FPS: {math.ceil(clock.get_fps())}", 0, 570, 12, color=(255, 255, 255))
         infectionBar = InfoBar(60,512 , 230, 10, player.infection)
         healthBar = InfoBar(60, 492, 230, 10, player.health)
         pygame.draw.rect(screen, (0, 255, 0), healthBar.getRenderObject())
         pygame.draw.rect(screen, (255, 0, 0), infectionBar.getRenderObject())
 
-
-
+class Winscreen:
+    def show(screen, fps):
+        wait = 0
+        while (1):
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+            screen.blit(endscreen, (0,0))
+            if wait > 200:
+                drawText(screen, "click to return to main menu", 10, 10, 20)
+                if pygame.mouse.get_pressed()[0]:
+                    c = startup.Startup()
+                    c.run(screen, fps)
+            wait += 1
+            pygame.display.update()
+            fps.tick(30)
+            
