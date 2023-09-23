@@ -102,7 +102,7 @@ class Player():
             
         if not self.onFloor:
             self.velocity.y += 0.5 
-        elif pygame.key.get_pressed()[pygame.K_w]:
+        elif pygame.key.get_pressed()[pygame.K_w] or pygame.key.get_pressed()[pygame.K_SPACE]:
             self.onFloor = False
             self.velocity.y = -15
 
@@ -242,7 +242,7 @@ class Gun:
         if hit != False:
             for platform in platforms:
                 if platform.dark:
-                    if math.hypot(platform.position.y - hit.y, platform.position.x - hit.x) < 150:
+                    if math.hypot(platform.position.y - hit.y, platform.position.x - hit.x) < 120:
                         platform.dark = False
 
 
