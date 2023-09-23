@@ -20,7 +20,9 @@ class Game:
         self.death = pygame.image.load("assets/death.png")
         self.bg = pygame.image.load("assets/background.png")
         self.healthboosts = []
-
+        self.dark = 0
+        self.Won = False
+        self.winfadetime = 0
     def load_map(self, path):
         with open(path + ".txt", "r") as f:
             data = f.read().split("\n")
@@ -54,6 +56,11 @@ class Game:
     
     def run(self,screen, fps):        
         while True:
+            if pygame.key.get_pressed()[pygame.K_j]:
+                self.flyingEnemies = []
+                self.groundEnemies = []
+                for b in self.platforms:
+                    b.dark = False
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -63,7 +70,7 @@ class Game:
             if self.player.alive:
                 if self.player.health < 0:
                     self.player.alive = False
-                self.player.physicsProcess(self.platforms, self.groundEnemies, self.camera, self.flyingEnemies, self.cures, self.healthboosts)
+                if not self.Won : self.player.physicsProcess(self.platforms, self.groundEnemies, self.camera, self.flyingEnemies, self.cures, self.healthboosts)
                 for enemy in self.flyingEnemies:
                     if math.hypot(enemy.position.y - self.player.position.y, enemy.position.x - self.player.position.x) > 1100:
                         continue
@@ -82,19 +89,28 @@ class Game:
                         continue
 
                     enemy.move(self.platforms)
-
+                self.dark = 0
+                for platform in self.platforms:
+                    if platform.dark:
+                        self.dark += 1
+                if self.dark == 0 and len(self.groundEnemies) + len(self.flyingEnemies) == 0:
+                    self.Won = True
+                    self.player.health = 100
+                    self.player.infection = 0
                 # rendering
-
-                for x in range(-5, 5):
-                    if self.player.position.x/3 + (x*1120) - self.player.position.x > 1000 or self.player.position.x/3 + (x*1120) - self.player.position.x < -1800:
-                        continue
-                    for y in range(-5, 5):
-                        if self.player.position.y/3 + y*580 - self.player.position.y > 600 or self.player.position.y/3 + y*580 - self.player.position.y  < -1000:
+                if not self.Won:
+                    for x in range(-5, 5):
+                        if self.player.position.x/3 + (x*1120) - self.player.position.x > 1000 or self.player.position.x/3 + (x*1120) - self.player.position.x < -1800:
                             continue
-                        screen.blit(self.bg, (
-                            self.player.position.x/3  - self.camera.target.x + self.camera.offset.x + (x*1120),
-                            self.player.position.y/3 - self.camera.target.y + self.camera.offset.y + (y*580))
-                        )
+                        for y in range(-5, 5):
+                            if self.player.position.y/3 + y*580 - self.player.position.y > 600 or self.player.position.y/3 + y*580 - self.player.position.y  < -1000:
+                                continue
+                            screen.blit(self.bg, (
+                                self.player.position.x/3  - self.camera.target.x + self.camera.offset.x + (x*1120),
+                                self.player.position.y/3 - self.camera.target.y + self.camera.offset.y + (y*580))
+                            )
+                else:
+                    screen.fill((22, 183, 255))
     
                 for platform in self.platforms:
                     if math.hypot(platform.position.y - self.player.position.y, platform.position.x - self.player.position.x) > 670:
@@ -111,7 +127,6 @@ class Game:
                     for projectile in enemy.projectiles:
                         pygame.draw.rect(screen, (255, 255, 50), pygame.Rect(projectile.position.x - self.camera.target.x + self.camera.offset.x, projectile.position.y- self.camera.target.y + self.camera.offset.y, 20, 20))
                 for index, enemy in enumerate(self.groundEnemies):
-                    print(enemy.velocity.y)
                     if enemy.velocity.y > 15:
                         self.groundEnemies.pop(index)
                         continue
@@ -135,6 +150,14 @@ class Game:
                     s.fill((0,random.randint(0, 5),random.randint(0, 5))) # epelepsy if too random?    
                     screen.blit(s, (0,0))
                 UI.GameUI.show(screen, self.player, self, fps) 
+                if self.Won:
+                    s = pygame.Surface((1120, 580))
+                    s.set_alpha(self.winfadetime)
+                    s.blit(UI.endscreen, (0,0))
+                    screen.blit(s, (0,0))
+                    self.winfadetime+=1
+                    if self.winfadetime > 200:
+                        UI.Winscreen.show(screen, fps)
                 
             else:
                 death = UI.DeathScreen()
