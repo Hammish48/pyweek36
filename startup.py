@@ -2,7 +2,7 @@ import pygame
 import sys
 import math
 from UI import drawText, Button
-
+import game
 class Startup:
     def __init__(self) -> None:
         self.startup = True
@@ -35,7 +35,9 @@ class Startup:
                 case 2:
                     screen.blit(pygame.image.load("assets/startup_2.png"), (0, 0))
                 case 3:
-                    self.startup = False
+                    g = game.Game()
+                    g.load_map("level_1")
+                    g.run(screen, fps)
        
             fps.tick(60)
             pygame.display.update()
