@@ -56,11 +56,6 @@ class Game:
     
     def run(self,screen, fps):        
         while True:
-            if pygame.key.get_pressed()[pygame.K_j]:
-                self.flyingEnemies = []
-                self.groundEnemies = []
-                for b in self.platforms:
-                    b.dark = False
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
