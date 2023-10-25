@@ -24,20 +24,21 @@ class Startup:
 
             match self.card:
                 case 0:
-                    screen.blit(pygame.image.load("assets/main.png"), (0, 0))
+                    screen.blit(pygame.image.load("assets/main.png").convert(), (0, 0))
                     if Button(45, 270, 180, 700).onClick():
                         self.card += 1
                     if Button(160, 380, 180, 700).onClick():
                         pygame.quit()
                         sys.exit()
                 case 1:
-                    screen.blit(pygame.image.load("assets/startup_1.png"), (0, 0))
+                    screen.blit(pygame.image.load("assets/startup_1.png").convert(), (0, 0))
                 case 2:
-                    screen.blit(pygame.image.load("assets/startup_2.png"), (0, 0))
+                    screen.blit(pygame.image.load("assets/startup_2.png").convert(), (0, 0))
                 case 3:
-                    g = game.Game()
-                    g.load_map("level_1")
-                    g.run(screen, fps)
+                    break
        
             fps.tick(60)
             pygame.display.update()
+        g = game.Game()
+        g.load_map("level_1")
+        g.run(screen, fps)
