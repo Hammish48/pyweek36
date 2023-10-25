@@ -19,6 +19,6 @@ shoot : LMB
 Dark Matter
 
 ### assets
-all art and code where done by Hammish47 and Reactoimpact
+all art and code were done by Hammish47 and Reactoimpact
 sound effects generated with https://sfxr.me/
 music is space fighter loop by Kevin MacLeod https://incompetech.com/
