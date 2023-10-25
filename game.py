@@ -17,8 +17,7 @@ class Game:
         self.flyingEnemies = []
         self.groundEnemies = []
         self.cures = []
-        self.death = pygame.image.load("assets/death.png")
-        self.bg = pygame.image.load("assets/background.png")
+        self.bg = pygame.image.load("assets/background.png").convert()
         self.healthboosts = []
         self.dark = 0
         self.Won = False
@@ -67,7 +66,7 @@ class Game:
                     self.player.alive = False
                 if not self.Won : self.player.physicsProcess(self.platforms, self.groundEnemies, self.camera, self.flyingEnemies, self.cures, self.healthboosts)
                 for enemy in self.flyingEnemies:
-                    if math.hypot(enemy.position.y - self.player.position.y, enemy.position.x - self.player.position.x) > 1100:
+                    if abs(enemy.position.y - self.player.position.y) > 500 or abs(enemy.position.x - self.player.position.x) > 900:
                         continue
                     enemy.fly(self.platforms, self.player)
                     for index, projectile in enumerate(enemy.projectiles):
@@ -80,7 +79,7 @@ class Game:
                                 enemy.projectiles.pop(index)
                                 break
                 for enemy in self.groundEnemies:
-                    if math.hypot(enemy.position.y - self.player.position.y, enemy.position.x - self.player.position.x) > 900:
+                    if abs(enemy.position.y - self.player.position.y) > 500 or abs(enemy.position.x - self.player.position.x) > 900:
                         continue
 
                     enemy.move(self.platforms)
@@ -108,11 +107,11 @@ class Game:
                     screen.fill((22, 183, 255))
     
                 for platform in self.platforms:
-                    if math.hypot(platform.position.y - self.player.position.y, platform.position.x - self.player.position.x) > 670:
+                    if abs(platform.position.y - self.player.position.y) > 380 or abs(platform.position.x - self.player.position.x) > 600:
                         continue
                     platform.render(self.camera, screen)
                 for enemy in self.flyingEnemies:
-                    if math.hypot(enemy.position.y - self.player.position.y, enemy.position.x - self.player.position.x) > 700:
+                    if abs(enemy.position.y - self.player.position.y) > 400 or abs(enemy.position.x - self.player.position.x) > 700:
                         continue
                     enemy.animation.tick()
                     if enemy.direction > 0:
@@ -121,19 +120,20 @@ class Game:
                         screen.blit(enemy.animation.getCurrentFrame(), (enemy.position.x - self.camera.target.x + self.camera.offset.x, enemy.position.y- self.camera.target.y + self.camera.offset.y))
                     for projectile in enemy.projectiles:
                         pygame.draw.rect(screen, (255, 255, 50), pygame.Rect(projectile.position.x - self.camera.target.x + self.camera.offset.x, projectile.position.y- self.camera.target.y + self.camera.offset.y, 20, 20))
-                for index, enemy in enumerate(self.groundEnemies):
-                    if enemy.velocity.y > 15:
-                        self.groundEnemies.pop(index)
-                        continue
-                    if math.hypot(enemy.position.y - self.player.position.y, enemy.position.x - self.player.position.x) > 700:
+                for enemy in self.groundEnemies:
+                    if abs(enemy.position.y - self.player.position.y) > 400 or abs(enemy.position.x - self.player.position.x) > 700:
                         continue
                     enemy.render(screen, self.camera)
                     if enemy.hitbox.colliderect(self.player.hitbox):
                         self.player.health -= .5
                         self.player.infection += .5
                 for cure in self.cures:
+                    if cure.position.y - self.player.position.y > 400 or cure.position.x - self.player.position.x > 700:
+                        continue
                     cure.render(self.camera, screen)
                 for healthboost in self.healthboosts:
+                    if healthboost.position.y - self.player.position.y > 400 or healthboost.position.x - self.player.position.x > 700:
+                        continue
                     healthboost.render(screen, self.camera)
 
                 self.player.render(screen, self.platforms, self.camera, self.groundEnemies)
@@ -152,12 +152,16 @@ class Game:
                     screen.blit(s, (0,0))
                     self.winfadetime+=1
                     if self.winfadetime > 200:
-                        UI.Winscreen.show(screen, fps)
+                        break
                 
             else:
-                death = UI.DeathScreen()
-                death.show(screen, fps, Game)
+                break
 
             fps.tick(60)
             pygame.display.update()
-
+        if self.player.alive and self.Won:
+            print("win")
+            UI.Winscreen.show(screen, fps)
+        else:
+            print("dead")
+            UI.DeathScreen.show(screen, fps)
