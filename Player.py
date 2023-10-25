@@ -18,7 +18,7 @@ class Explosion(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.images = []
         for num in range(1, 5):
-            img = pygame.image.load(f"assets/shoot/{num}.png")
+            img = pygame.image.load(f"assets/shoot/{num}.png").convert_alpha()
             pygame.transform.scale(img, (100, 100))
             self.images.append(img)
         self.index = 0
@@ -62,6 +62,7 @@ class Player():
         self.infection = 0
         self.infection_rate = 0.01
         self.gun = Gun(0, 10, 30, "white", 2, 30, 1)
+        self.jumpSprite = pygame.image.load("./assets/player/jump.png").convert_alpha()
     
     def physicsProcess(self, platforms, enemies, camera, flyingEnemies, cures, healthboosts):
         self.velocity.x = 0
@@ -166,9 +167,9 @@ class Player():
                 screen.blit(pygame.transform.flip(self.animation.getCurrentFrame(), True, False), self.position - camera.target + camera.offset)
         else:
             if self.forward:
-                screen.blit(pygame.image.load("./assets/player/jump.png"), self.position - camera.target + camera.offset)
+                screen.blit(self.jumpSprite, self.position - camera.target + camera.offset)
             else:
-                screen.blit(pygame.transform.flip(pygame.image.load("./assets/player/jump.png"), True, False), self.position - camera.target + camera.offset)
+                screen.blit(pygame.transform.flip(self.jumpSprite, True, False), self.position - camera.target + camera.offset)
 
         self.gun.render(screen, camera)
 
@@ -217,7 +218,7 @@ class Gun:
                 if platform.hitbox.collidepoint(bullet.position):
                     hit = bullet.position
                     bullets.pop(indx)
-                    explosion = Explosion(pos.x - camera.target.x + camera.offset.x, pos.y - camera.target.y + camera.offset.y)
+                    explosion = Explosion(pos.x, pos.y)
                     explosion_group.add(explosion)
                     break
             for index, enemy in enumerate(enemies):
@@ -226,7 +227,7 @@ class Gun:
                     if enemy.health < 0:
                         enemies.pop(index)
                     bullets.pop(indx)
-                    explosion = Explosion(pos.x - camera.target.x + camera.offset.x, pos.y - camera.target.y + camera.offset.y)
+                    explosion = Explosion(pos.x, pos.y)
                     explosion_group.add(explosion)
                     break
             for index, enemy in enumerate(flyingEnemies):
@@ -235,7 +236,7 @@ class Gun:
                     if enemy.health <= 0:
                         flyingEnemies.pop(index)
                     bullets.pop(indx)
-                    explosion = Explosion(pos.x - camera.target.x + camera.offset.x, pos.y - camera.target.y + camera.offset.y)
+                    explosion = Explosion(pos.x, pos.y)
                     explosion_group.add(explosion)
                     break
             bullet.move()
@@ -252,7 +253,8 @@ class Gun:
     
 
     def render(self, screen, camera):
-        explosion_group.draw(screen)
+        for x in explosion_group.sprites():
+            screen.blit(x.image, (x.rect.center[0] - camera.target.x + camera.offset.x, x.rect.center[1] - camera.target.y + camera.offset.y))
         explosion_group.update()
         
         pygame.draw.line(screen, self.color, (
