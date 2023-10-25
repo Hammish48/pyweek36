@@ -13,7 +13,7 @@ class FlyingEnemy:
         self.projectiles = []
         self.shotCooldown = 0
         self.health = 4
-        self.animation = AnimationPlayer([AnimationFrame(pygame.image.load("./assets/flying enemy flap 1.png"), 30), AnimationFrame(pygame.image.load("./assets/flying enemy flap 2.png"), 30)])
+        self.animation = AnimationPlayer([AnimationFrame(pygame.image.load("./assets/flying enemy flap 1.png").convert_alpha(), 30), AnimationFrame(pygame.image.load("./assets/flying enemy flap 2.png").convert_alpha(), 30)])
     def changedirection(self):
         r = random.randint(1, 6)
         self.cooldown = random.randint(0, 300)
@@ -59,7 +59,7 @@ class GroundEnemy:
         self.direction = 1
         self.hitbox = pygame.Rect(x, y, self.size.x, self.size.y)
         self.health = 3
-        self.sprite = pygame.image.load("assets/ground enemy.png")
+        self.sprite = pygame.image.load("assets/ground enemy.png").convert()
     def changedirection(self):
         self.cooldown = random.randint(0, 300)
         if random.randint(1, 6) < 2:
@@ -80,24 +80,28 @@ class GroundEnemy:
             self.velocity.y += 0.5 
         if self.onFloor:
             self.onFloor = False
-            for index, platform in enumerate(platforms):
+            for platform in platforms:
                 if platform.hitbox.colliderect(pygame.Rect(self.position.x, self.position.y + self.size.y + 1, self.size.x, 1)):
                     self.onFloor = True
                     if random.randint(0, 480) == 2:
                         platform.dark = True
+        
         for platform in platforms:
+            if abs(platform.position.y - self.position.y) > 100:
+                continue
+            if abs(platform.position.x - self.position.x) > 100:
+                continue
             if pygame.Rect(self.position.x + (self.velocity.x * self.direction), self.position.y + self.velocity.y, self.size.x, self.size.y).colliderect(platform.hitbox):
-                if self.position.x + self.size.x > platform.position.x and self.position.x < platform.position.x + platform.size.x:
-                    # collision with top or bottom of enemy
-                    self.velocity.y = 0
-                    if self.position.y < platform.position.y:
-                        self.position.y = platform.position.y - self.size.y
-                        self.onFloor = True
-                    elif self.position.y > platform.position.y + platform.size.y - 3:
-                        self.position.y = platform.position.y + platform.size.y
-
+                if not self.onFloor:
+                    if self.position.x + self.size.x > platform.position.x and self.position.x < platform.position.x + platform.size.x:
+                        # collision with top or bottom of enemy
+                        self.velocity.y = 0
+                        if self.position.y < platform.position.y:
+                            self.position.y = platform.position.y - self.size.y
+                            self.onFloor = True
+                        elif self.position.y > platform.position.y + platform.size.y - 3:
+                            self.position.y = platform.position.y + platform.size.y
                 if self.position.y + self.size.y > platform.position.y and self.position.y < platform.position.y + platform.size.y:
-                    # collision with side of block
                     self.direction *= -1
         self.position.x += self.velocity.x * self.direction
         self.position.y += self.velocity.y
