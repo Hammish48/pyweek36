@@ -2,15 +2,15 @@ import pygame
 
 class Platform:
     textures = {
-        "dirt block":pygame.image.load("assets/" + "dirt block" + ".png").convert_alpha(),
-        "grass block":pygame.image.load("assets/" + "grass block" + ".png").convert_alpha(),
-        "stone block":pygame.image.load("assets/" + "stone block" + ".png").convert_alpha(),
-        "brick block":pygame.image.load("assets/" + "brick block" + ".png").convert_alpha()
+        "dirt block":pygame.image.load("assets/" + "dirt block" + ".png").convert(),
+        "grass block":pygame.image.load("assets/" + "grass block" + ".png").convert(),
+        "stone block":pygame.image.load("assets/" + "stone block" + ".png").convert(),
+        "brick block":pygame.image.load("assets/" + "brick block" + ".png").convert()
     }
     darktextures = {
-        "dark block":pygame.image.load("assets/" + "dark block" + ".png").convert_alpha(),
-        "dark stone block":pygame.image.load("assets/" + "dark stone block" + ".png").convert_alpha(),
-        "dark brick block":pygame.image.load("assets/" + "dark brick block" + ".png").convert_alpha()
+        "dark block":pygame.image.load("assets/" + "dark block" + ".png").convert(),
+        "dark stone block":pygame.image.load("assets/" + "dark stone block" + ".png").convert(),
+        "dark brick block":pygame.image.load("assets/" + "dark brick block" + ".png").convert()
     }
     def __init__(self, x, y, width, height, texture, darktexture="dark block"):
         self.position = pygame.Vector2(x, y)
