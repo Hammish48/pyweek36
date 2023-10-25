@@ -3,7 +3,7 @@ import sys
 import math
 import startup
 
-endscreen = pygame.image.load("assets/end screen.png")
+endscreen = pygame.image.load("./assets/end screen.png").convert()
 class Button:
     def __init__(self, x, y, width, height) -> None:
         self.position = pygame.Vector2(x, y)
@@ -28,14 +28,12 @@ class InfoBar:
     def getRenderObject(self):
         return pygame.Rect(self.position.x, self.position.y, (self.val/100)*self.width, self.height)
 
-
+import game
 class DeathScreen:
-    def __init__(self) -> None:
-        pass
-    def show(self, screen, fps, game):
+    def show(screen, fps):
         restart = Button(200, 425, 220, 100)
         quit = Button(450, 425, 220, 100)
-        screen.blit(pygame.image.load("./assets/death.png"), (0,0))
+        screen.blit(pygame.image.load("./assets/death.png").convert(), (0,0))
         pygame.display.update()
         while (1):
             for event in pygame.event.get():
@@ -45,10 +43,11 @@ class DeathScreen:
             if quit.onClick():
                 sys.exit()
             if restart.onClick():
-                g = game()
-                g.load_map("level_1")
-                g.run(screen, fps)
+                break
             fps.tick(30)
+        g = game.Game()
+        g.load_map("level_1")
+        g.run(screen, fps)
 
 def drawText(screen, text = "Hello, World", x = 0, y = 0, size = 10, font="Helvetica-Bold.ttf", color=(0,0,0)):
     screen.blit(pygame.font.Font(f"./assets/{font}", size).render((text), True, color), (x, y))
